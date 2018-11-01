@@ -1,16 +1,39 @@
 package cs371m.bowen.somepawtytolove;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    final int MAPS_ACTIVITY = 1;
+    final int SETTINGS_ACTIVITY = 2;
+    final int SAVED_ACTIVITY = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Set up listeners
+        ImageButton rejectButton = findViewById(R.id.rejectButton);
+        rejectButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                rejectPet();
+            }
+        });
+
+        ImageButton saveButton = findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                savePet();
+            }
+        });
     }
 
     @Override
@@ -20,6 +43,33 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    protected void savePet() {
+        Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
+        toast.show();
+        //todo: save pet
+        //todo: load new pet
+        //todo: updatePetUI(pet);
+    }
+
+    protected void rejectPet() {
+        Toast toast = Toast.makeText(this, "rejecting pets not yet implemented", Toast.LENGTH_SHORT);
+        toast.show();
+        //todo: load new pet
+        //todo: updatePetUI(pet);
+    }
+
+    protected void updatePetUI(Pet pet) {
+        TextView name = findViewById(R.id.nameTxt);
+        name.setText(pet.getName());
+        TextView type = findViewById(R.id.speciesTxt);
+        type.setText(pet.getBreed());
+        TextView location = findViewById(R.id.locationTxt);
+        location.setText(pet.getLocation());
+        TextView age = findViewById(R.id.ageTxt);
+        age.setText(pet.getLocation());
+        //todo: load pic with glide like redfetch
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -27,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 //todo: load settings
                 return true;
             case R.id.action_map:
-                //todo: load map
+                Intent i = new Intent(this, MapsActivity.class);
+                //i.putExtra("loop_setting", loop);
+                //todo: add extras?
+                startActivityForResult(i, MAPS_ACTIVITY);
                 return true;
             case R.id.action_saved:
                 //todo: load saved
