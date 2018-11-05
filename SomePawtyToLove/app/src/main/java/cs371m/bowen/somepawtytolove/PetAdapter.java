@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolder> {
     private ArrayList<Pet> pets;
@@ -33,9 +32,9 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
         }
     }
 
-    public PetAdapter(Context context, List<Pet> pets){
+    public PetAdapter(Context context, ArrayList<Pet> pets){
         this.context = context;
-        this.pets = (ArrayList<Pet>) pets;
+        this.pets = pets;
     }
 
     @NonNull

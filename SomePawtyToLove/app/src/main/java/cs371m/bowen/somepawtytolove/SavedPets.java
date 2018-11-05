@@ -6,15 +6,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.MenuItem;
 
 public class SavedPets extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private List<Pet> pets;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,15 +22,18 @@ public class SavedPets extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        pets = new ArrayList<>();
         // retrieve saved pets from somewhere
-        PetAdapter petAdapter = new PetAdapter(this, pets);
+        PetAdapter petAdapter = new PetAdapter(this, MainActivity.savedPets);
         recyclerView.setAdapter(petAdapter);
     }
 
-    public void addPet(Pet newPet){
-        pets.add(0, newPet);
-        recyclerView.getAdapter().notifyItemInserted(0);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     // figure out how to update adapter if this activity hasn't been opened yet.

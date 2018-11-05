@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tell us about your future friend:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/settings_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age: "
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/settings_species"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message" />
+
+    <RadioButton
+        android:id="@+id/settings_baby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Baby"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:checked="true"
+        app:layout_constraintTop_toTopOf="@id/settings_age"
+        app:layout_constraintStart_toEndOf="@id/settings_age"
+        app:layout_constraintEnd_toStartOf="@id/settings_adult"/>
+
+    <RadioButton
+        android:id="@+id/settings_adult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adult"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:checked="true"
+        app:layout_constraintTop_toTopOf="@id/settings_age"
+        app:layout_constraintStart_toEndOf="@id/settings_baby"
+        app:layout_constraintEnd_toStartOf="@id/settings_senior"/>
+
+    <RadioButton
+        android:id="@+id/settings_senior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Senior"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:checked="true"
+        app:layout_constraintTop_toTopOf="@id/settings_age"
+        app:layout_constraintStart_toEndOf="@id/settings_adult"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/settings_species"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Species: "
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/settings_breed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_age" />
+
+    <Spinner
+        android:id="@+id/species_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/settings_species"
+        app:layout_constraintStart_toEndOf="@id/settings_species"
+        app:layout_constraintEnd_toEndOf="parent">
+    </Spinner>
+
+    <TextView
+        android:id="@+id/settings_breed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Breed: "
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/settings_sex"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_species" />
+
+    <Spinner
+        android:id="@+id/breed_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/settings_breed"
+        app:layout_constraintStart_toEndOf="@id/settings_breed"
+        app:layout_constraintEnd_toEndOf="parent">
+    </Spinner>
+
+    <TextView
+        android:id="@+id/settings_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sex: "
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_breed"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <RadioGroup
+        android:id="@+id/sex_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="@id/settings_sex"
+        app:layout_constraintStart_toEndOf="@id/settings_sex"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/male"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Male"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+        <RadioButton
+            android:id="@+id/female"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Female"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+        <RadioButton
+            android:id="@+id/both"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Both"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:checked="true"/>
+    </RadioGroup>
+</android.support.constraint.ConstraintLayout>
