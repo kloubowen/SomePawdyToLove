@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         savedPets = new ArrayList<>();
+        Net.init(getApplicationContext());
     }
 
     @Override
