@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     final int SETTINGS_ACTIVITY = 2;
     final int SAVED_ACTIVITY = 3;
     public static ArrayList<Pet> savedPets;
+    public static String AppName = "SomePawdyToLove";
+    private PetFetcher petFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         savedPets = new ArrayList<>();
+        petFetcher = new PetFetcher();
         Net.init(getApplicationContext());
     }
 
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void savePet() {
         Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
         toast.show();
+        petFetcher.getRandomPet(null, null, null, "78741");
         //todo: save pet
         //todo: load new pet
         //todo: updatePetUI(pet);
