@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PetJson.IPetJson {
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
     final int SAVED_ACTIVITY = 3;
@@ -56,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
     protected void savePet() {
         Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
         toast.show();
-        petFetcher.getRandomPet(null, null, null, "78741");
+//        petFetcher.getBreeds("cat", this);
+//        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
+//        petFetcher.findPets(null, null, null, "78705", null, this);
+//        petFetcher.getShelter("CA790", this);
         //todo: save pet
         //todo: load new pet
         //todo: updatePetUI(pet);
@@ -101,5 +104,30 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void fetchPet(Pet pet) {
+
+    }
+
+    @Override
+    public void fetchPetList(ArrayList<Pet> pets) {
+
+    }
+
+    @Override
+    public void fetchBreedList(ArrayList<String> breeds) {
+        // Intentionally left blank. Only Setting should deal with breeds.
+    }
+
+    @Override
+    public void fetchShelter(Object shelter) {
+
+    }
+
+    @Override
+    public void fetchShelterList(Object shelters) {
+
     }
 }

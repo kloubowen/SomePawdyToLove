@@ -51,7 +51,7 @@ public class PetFetcher {
 
     private final String TAG = "Fetch";
 
-    public void getBreeds(String species){
+    public void getBreeds(String species, PetJson.IPetJson callback){
         if (species == null){
             Log.i(TAG, "No type of animal was given.");
             return;
@@ -59,12 +59,12 @@ public class PetFetcher {
         createBaseUrl();
         builder.appendPath(BREEDS)
                 .appendQueryParameter(KEY, MY_KEY)
-                .appendQueryParameter(ANIMAL, species)
+                .appendQueryParameter(ANIMAL, species.toLowerCase())
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(BREEDS_ID);
+        fetchJSON(BREEDS_ID, callback);
     }
 
-    public void getPet(String petId){
+    public void getPet(String petId, PetJson.IPetJson callback){
         if (petId == null){
             Log.i(TAG, "No pet was specified.");
             return;
@@ -74,10 +74,11 @@ public class PetFetcher {
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(ID, petId)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(SINGLE_PET_ID);
+        fetchJSON(SINGLE_PET_ID, callback);
     }
 
-    public void getRandomPet(String species, String breed, String sex, String location){
+    public void getRandomPet(String species, String breed, String sex, String location,
+                             PetJson.IPetJson callback){
         if (location == null){
             Log.i(TAG, "No location was given to find pets.");
             return;
@@ -100,10 +101,11 @@ public class PetFetcher {
         builder.appendQueryParameter(LOCATION, location)
                 .appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(RANDOM_PET_ID);
+        fetchJSON(RANDOM_PET_ID, callback);
     }
 
-    public void findPets(String species, String breed, String sex, String location, String age){
+    public void findPets(String species, String breed, String sex, String location, String age,
+                         PetJson.IPetJson callback){
         if (location == null){
             Log.i(TAG, "No location was given to find pets.");
             return;
@@ -132,10 +134,10 @@ public class PetFetcher {
 
         builder.appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(FIND_PETS_ID);
+        fetchJSON(FIND_PETS_ID, callback);
     }
 
-    public void getShelter(String shelterId){
+    public void getShelter(String shelterId, PetJson.IPetJson callback){
         if (shelterId == null){
             Log.i(TAG, "No shelter was specified.");
             return;
@@ -145,10 +147,10 @@ public class PetFetcher {
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(ID, shelterId)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(SINGLE_SHELTER_ID);
+        fetchJSON(SINGLE_SHELTER_ID, callback);
     }
 
-    public void findShelters(String location){
+    public void findShelters(String location, PetJson.IPetJson callback){
         if (location == null){
             Log.i(TAG, "No location was given to find shelters.");
             return;
@@ -158,10 +160,10 @@ public class PetFetcher {
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(LOCATION, location)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(FIND_SHELTERS_ID);
+        fetchJSON(FIND_SHELTERS_ID, callback);
     }
 
-    public void getPetsFromShelter(String shelterId){
+    public void getPetsFromShelter(String shelterId, PetJson.IPetJson callback){
         if (shelterId == null){
             Log.i(TAG, "No id for the shelter was specified.");
             return;
@@ -172,10 +174,10 @@ public class PetFetcher {
                 .appendQueryParameter(ID, shelterId)
                 .appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(SHELTER_PETS_ID);
+        fetchJSON(SHELTER_PETS_ID, callback);
     }
 
-    public void getSheltersWithBreed(String species, String breed){
+    public void getSheltersWithBreed(String species, String breed, PetJson.IPetJson callback){
         if (species == null || breed == null){
             Log.i(TAG, "The type of animal or breed of animal were not specified.");
             return;
@@ -186,16 +188,33 @@ public class PetFetcher {
                 .appendQueryParameter(ANIMAL, species)
                 .appendQueryParameter(BREED, breed)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(BREED_SHELTERS_ID);
+        fetchJSON(BREED_SHELTERS_ID, callback);
     }
 
-    private void fetchJSON(int functionID){
+    private void fetchJSON(final int functionID, final PetJson.IPetJson callback){
         final String url = builder.build().toString();
         Request request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.i("Request", "Responded" + response.toString());
+                Log.i("Request", "Responded ");
+                switch (functionID){
+                    case BREEDS_ID:
+                        callback.fetchBreedList(PetJson.jsonToBreed(response));break;
+                    case SINGLE_PET_ID:
+                        callback.fetchPet(PetJson.jsonToPet(response));break;
+                    case RANDOM_PET_ID:
+                        callback.fetchPet(PetJson.jsonToPet(response));break;
+                    case FIND_PETS_ID:
+                        callback.fetchPetList(PetJson.jsonToPetList(response));break;
+                    case SINGLE_SHELTER_ID:
+                        callback.fetchShelter(PetJson.jsonToShelter(response));break;
+                    case FIND_SHELTERS_ID:
+                        callback.fetchShelterList(PetJson.jsonToShelterList(response));break;
+                    case SHELTER_PETS_ID:
+                        callback.fetchPetList(PetJson.jsonToPetList(response));break;
+                    case BREED_SHELTERS_ID:break;
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -212,4 +231,11 @@ public class PetFetcher {
         builder.scheme(SCHEME)
                 .authority(AUTHORITY);
     }
+
+    // Use this to print Json
+//     + response.toString().substring(0, response.toString().length()/3));
+//    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5, 2*response.toString().length()/5));
+//    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5*2, 3*response.toString().length()/5));
+//    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5*3, 4*response.toString().length()/5));
+//    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5*4));
 }
