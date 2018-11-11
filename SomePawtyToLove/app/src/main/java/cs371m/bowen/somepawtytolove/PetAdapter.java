@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolder> {
     private ArrayList<Pet> pets;
@@ -28,18 +27,14 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
             name = theView.findViewById(R.id.name);
             breed = theView.findViewById(R.id.breed);
             location = theView.findViewById(R.id.location);
+            // possibly set an on click listener to pull up more info on pet
+            //find a way to set email to link to email
         }
     }
 
-    public PetAdapter(Context context, List<Pet> pets){
+    public PetAdapter(Context context, ArrayList<Pet> pets){
         this.context = context;
-        this.pets = (ArrayList<Pet>) pets;
-    }
-
-    public void addPet(Pet newPet){
-        pets.add(newPet);
-        notifyItemChanged(getItemCount() - 1);
-        // may need to change to getItemCount() - 2
+        this.pets = pets;
     }
 
     @NonNull
@@ -51,7 +46,11 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull DynamicViewHolder holder, int position) {
-
+        Pet pet = pets.get(position);
+        holder.location.setText(pet.getLocation());
+        holder.breed.setText(pet.getBreed());
+        holder.name.setText(pet.getName());
+        //use glide to set image
     }
 
     @Override

@@ -10,10 +10,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
     final int SAVED_ACTIVITY = 3;
+    public static ArrayList<Pet> savedPets;
+    public static String AppName = "SomePawdyToLove";
+    private PetFetcher petFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
                 savePet();
             }
         });
+
+        savedPets = new ArrayList<>();
+        petFetcher = new PetFetcher();
+        Net.init(getApplicationContext());
     }
 
     @Override
@@ -46,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void savePet() {
         Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
         toast.show();
+        petFetcher.getRandomPet(null, null, null, "78741");
         //todo: save pet
         //todo: load new pet
         //todo: updatePetUI(pet);
@@ -84,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_saved:
                 //todo: load saved
+                Intent saved = new Intent(this, SavedPets.class);
+                startActivity(saved);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

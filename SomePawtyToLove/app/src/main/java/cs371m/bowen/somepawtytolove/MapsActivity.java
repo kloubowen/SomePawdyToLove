@@ -87,12 +87,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void updateLocationUI() {
         if (mMap == null) {
+            Log.i("maps", "mMap is null");
             return;
         }
         try {
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(mLastKnownLocation.getLatitude(),
+                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -117,10 +121,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
+                            Log.i("maps", "location successfully found");
                             mLastKnownLocation = (Location)task.getResult();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         } else {
                             Log.d("map", "Current location is null. Using defaults.");
                             Log.e("map", "Exception: %s", task.getException());
@@ -129,7 +131,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 });
-            }
+            } else
+                Log.i("map", "permission not granted");
         } catch(SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
