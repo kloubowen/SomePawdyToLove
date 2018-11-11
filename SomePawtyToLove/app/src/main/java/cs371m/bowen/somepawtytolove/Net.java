@@ -42,9 +42,6 @@ public class Net {
                 .fitCenter()
                 // A placeholder image for when the network is slow
                 .placeholder(R.drawable.ic_cloud_download_black_24dp)
-                // Rounded corners are so lovely.
-                .transform(
-                        new RoundedCorners(20))
                 // If we can't fetch, give the user an indication  maybe it should
                 // say "network error"
                 .error(new ColorDrawable(Color.RED));
