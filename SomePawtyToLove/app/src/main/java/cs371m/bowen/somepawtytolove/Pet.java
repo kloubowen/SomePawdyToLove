@@ -23,6 +23,7 @@ public class Pet {
         this.breed = breed;
         this.zip = zip;
         picUrls = new ArrayList<>();
+        this.age = age;
     }
 
     public String getAge(){

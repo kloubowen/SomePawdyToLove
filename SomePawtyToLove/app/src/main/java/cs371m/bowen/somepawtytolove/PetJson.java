@@ -29,11 +29,18 @@ public class PetJson {
                     return null;
                 String age = petObj.getJSONObject("age").getString("$t");
                 String name = petObj.getJSONObject("name").getString("$t");
-            Log.d("age", age);
-            Log.d("name", name);
+                Log.d("age", age);
+                Log.d("name", name);
                 //todo: handle breeds as list
                 JSONObject breeds = petObj.getJSONObject("breeds");
-                String breed = breeds.getString("breed");
+                JSONArray breedArray = breeds.getJSONArray("breed");
+                String breed = "";
+                for(int x = 0; x < breedArray.length(); x++) {
+                    JSONObject b = breedArray.getJSONObject(x);
+                    breed+=b.getString("$t");
+                    if(x != breedArray.length()-1)
+                        breed+=", ";
+                }
                 JSONObject contact = petObj.getJSONObject("contact");
                 String zip = contact.getJSONObject("zip").getString("$t");
                 Pet mPet = new Pet(name, breed, zip, age);
@@ -70,7 +77,18 @@ public class PetJson {
         return null;
     }
 
-    public static ArrayList<String> jsonToBreed(JSONObject jo){
-        return null;
+    public static ArrayList<String> jsonToBreed(JSONObject jO){
+        ArrayList<String> breedList = new ArrayList<>();
+        try{
+            JSONObject breeds = jO.getJSONObject("petfinder").getJSONObject("breeds");
+            JSONArray breedArray = breeds.getJSONArray("breed");
+            for(int x = 0; x<breedArray.length(); x++){
+                String breed = breedArray.getJSONObject(x).getString("$t");
+                breedList.add(breed);
+            }
+        } catch (JSONException error) {
+            Log.d("Error", "JSON parsing");
+        }
+        return breedList;
     }
 }

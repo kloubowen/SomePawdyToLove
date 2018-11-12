@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     public static String AppName = "SomePawdyToLove";
     private PetFetcher petFetcher;
     private Net net;
+    private Pet currentPet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     }
 
     protected void updatePetUI(Pet pet) {
+        currentPet = pet;
         TextView name = findViewById(R.id.nameTxt);
         name.setText(pet.getName());
         TextView type = findViewById(R.id.speciesTxt);
