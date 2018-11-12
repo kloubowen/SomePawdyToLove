@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,11 +21,13 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     public static ArrayList<Pet> savedPets;
     public static String AppName = "SomePawdyToLove";
     private PetFetcher petFetcher;
+    private Net net;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        net =Net.getInstance();
 
         //Set up listeners
         ImageButton rejectButton = findViewById(R.id.rejectButton);
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         savedPets = new ArrayList<>();
         petFetcher = new PetFetcher();
         Net.init(getApplicationContext());
+        petFetcher.getRandomPet(null, null, null, "78705", this);
     }
 
     @Override
@@ -54,20 +58,22 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     }
 
     protected void savePet() {
-        Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
-        toast.show();
+        //Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
+        //toast.show();
 //        petFetcher.getBreeds("cat", this);
 //        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
 //        petFetcher.findPets(null, null, null, "78705", null, this);
 //        petFetcher.getShelter("CA790", this);
+        petFetcher.getRandomPet(null, null, null, "78705", this);
         //todo: save pet
         //todo: load new pet
         //todo: updatePetUI(pet);
     }
 
     protected void rejectPet() {
-        Toast toast = Toast.makeText(this, "rejecting pets not yet implemented", Toast.LENGTH_SHORT);
-        toast.show();
+       // Toast toast = Toast.makeText(this, "rejecting pets not yet implemented", Toast.LENGTH_SHORT);
+        //toast.show();
+        petFetcher.getRandomPet(null, null, null, "78705", this);
         //todo: load new pet
         //todo: updatePetUI(pet);
     }
@@ -80,7 +86,11 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         TextView location = findViewById(R.id.locationTxt);
         location.setText(pet.getLocation());
         TextView age = findViewById(R.id.ageTxt);
-        age.setText(pet.getLocation());
+        age.setText(pet.getAge());
+        ImageView pic = findViewById(R.id.profileImage);
+
+        net.glideFetch(pet.getPic(), pic);
+
         //todo: load pic with glide like redfetch
     }
 
@@ -108,7 +118,10 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 
     @Override
     public void fetchPet(Pet pet) {
-
+        if(pet==null)
+            petFetcher.getRandomPet(null, null, null, "78705", this);
+        else
+            updatePetUI(pet);
     }
 
     @Override
