@@ -51,4 +51,17 @@ public class Pet {
             return null;
         return picUrls.get(0);
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public void setCityState(String city, String state) {
+        this.city = city;
+        this.state = state;
+    }
 }

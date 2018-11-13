@@ -194,6 +194,7 @@ public class PetFetcher {
 
     private void fetchJSON(final int functionID, final PetJson.IPetJson callback){
         final String url = builder.build().toString();
+        Log.d("uri", url);
         Request request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
             @Override

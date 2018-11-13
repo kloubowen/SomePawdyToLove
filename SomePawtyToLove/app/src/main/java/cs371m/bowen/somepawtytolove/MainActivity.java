@@ -1,8 +1,10 @@
 package cs371m.bowen.somepawtytolove;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,22 +30,25 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        net =Net.getInstance();
+        net = Net.getInstance();
 
         //Set up listeners
-        ImageButton rejectButton = findViewById(R.id.rejectButton);
+        FloatingActionButton rejectButton = findViewById(R.id.floatingReject);
         rejectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 rejectPet();
             }
         });
 
-        ImageButton saveButton = findViewById(R.id.saveButton);
+        FloatingActionButton saveButton = findViewById(R.id.floatingSave);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 savePet();
             }
         });
+
+        TextView textView = (TextView) findViewById(R.id.descriptionTxt);
+        textView.setMovementMethod(new ScrollingMovementMethod());
 
         savedPets = new ArrayList<>();
         petFetcher = new PetFetcher();
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 //        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
 //        petFetcher.findPets(null, null, null, "78705", null, this);
 //        petFetcher.getShelter("CA790", this);
-        petFetcher.getRandomPet(null, null, null, "78705", this);
+        petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
         //todo: save pet
         //todo: load new pet
         //todo: updatePetUI(pet);
@@ -82,18 +87,18 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     protected void updatePetUI(Pet pet) {
         currentPet = pet;
         TextView name = findViewById(R.id.nameTxt);
-        name.setText(pet.getName());
+        setTxtOr(name, pet.getName(), "No Name");
         TextView type = findViewById(R.id.speciesTxt);
-        type.setText(pet.getBreed());
+        setTxtOr(type, pet.getBreed(), "Breed Unknown");
         TextView location = findViewById(R.id.locationTxt);
-        location.setText(pet.getLocation());
+        setTxtOr(location, pet.getLocation(), "Location Unknown");
         TextView age = findViewById(R.id.ageTxt);
-        age.setText(pet.getAge());
+        setTxtOr(age, pet.getAge(), "Age Unknown");
+        TextView bio = findViewById(R.id.descriptionTxt);
+        setTxtOr(bio, pet.getDescription(), "");
         ImageView pic = findViewById(R.id.profileImage);
 
         net.glideFetch(pet.getPic(), pic);
-
-        //todo: load pic with glide like redfetch
     }
 
     @Override
@@ -145,4 +150,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     public void fetchShelterList(Object shelters) {
 
     }
+
+    private void setTxtOr(TextView view, String txt, String alternate) {
+        if(txt!=null)
+            view.setText(txt);
+        else
+            view.setText(alternate);
+    }
+
 }
