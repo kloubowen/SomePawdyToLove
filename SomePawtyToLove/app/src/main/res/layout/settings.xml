@@ -30,34 +30,34 @@
         android:id="@+id/settings_baby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:text="Baby"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:checked="true"
-        app:layout_constraintTop_toTopOf="@id/settings_age"
+        app:layout_constraintEnd_toStartOf="@id/settings_adult"
         app:layout_constraintStart_toEndOf="@id/settings_age"
-        app:layout_constraintEnd_toStartOf="@id/settings_adult"/>
+        app:layout_constraintTop_toTopOf="@id/settings_age" />
 
     <RadioButton
         android:id="@+id/settings_adult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:text="Adult"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:checked="true"
-        app:layout_constraintTop_toTopOf="@id/settings_age"
+        app:layout_constraintEnd_toStartOf="@id/settings_senior"
         app:layout_constraintStart_toEndOf="@id/settings_baby"
-        app:layout_constraintEnd_toStartOf="@id/settings_senior"/>
+        app:layout_constraintTop_toTopOf="@id/settings_age" />
 
     <RadioButton
         android:id="@+id/settings_senior"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:text="Senior"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:checked="true"
-        app:layout_constraintTop_toTopOf="@id/settings_age"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/settings_adult"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/settings_age" />
 
     <TextView
         android:id="@+id/settings_species"
@@ -73,10 +73,9 @@
         android:id="@+id/species_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/settings_species"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/settings_species"
-        app:layout_constraintEnd_toEndOf="parent">
-    </Spinner>
+        app:layout_constraintTop_toTopOf="@id/settings_species"></Spinner>
 
     <TextView
         android:id="@+id/settings_breed"
@@ -92,10 +91,20 @@
         android:id="@+id/breed_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/settings_breed"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/settings_breed"
-        app:layout_constraintEnd_toEndOf="parent">
-    </Spinner>
+        app:layout_constraintTop_toTopOf="@id/settings_breed"></Spinner>
+
+    <TextView
+        android:id="@+id/breed_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select a species first."
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settings_breed"
+        app:layout_constraintTop_toTopOf="@id/settings_breed" />
 
     <TextView
         android:id="@+id/settings_sex"
@@ -103,18 +112,18 @@
         android:layout_height="wrap_content"
         android:text="Sex: "
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@id/apply"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_breed"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/settings_breed" />
 
     <RadioGroup
         android:id="@+id/sex_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="@id/settings_sex"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/settings_sex"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="@id/settings_sex">
 
         <RadioButton
             android:id="@+id/male"
@@ -122,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Male"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <RadioButton
             android:id="@+id/female"
@@ -130,15 +139,38 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Female"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <RadioButton
             android:id="@+id/both"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="Both"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:checked="true"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/apply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apply"
+        android:onClick="apply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_sex" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:onClick="cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/apply"
+        app:layout_constraintTop_toTopOf="@id/apply" />
 </android.support.constraint.ConstraintLayout>

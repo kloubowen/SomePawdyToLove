@@ -51,7 +51,6 @@ public class PetFetcher {
 
     private final String TAG = "Fetch";
 
-
     public void getBreeds(String species, PetJson.IPetJson callback){
         if (species == null){
             Log.i(TAG, "No type of animal was given.");

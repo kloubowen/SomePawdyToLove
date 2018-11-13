@@ -27,6 +27,8 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
             name = theView.findViewById(R.id.name);
             breed = theView.findViewById(R.id.breed);
             location = theView.findViewById(R.id.location);
+//            Pet pet = pets.get(getAdapterPosition());
+//            Net.getInstance().glideFetch(pet.getPic(), thumbnail);
             // possibly set an on click listener to pull up more info on pet
             //find a way to set email to link to email
         }
