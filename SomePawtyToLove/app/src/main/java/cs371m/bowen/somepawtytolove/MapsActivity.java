@@ -91,12 +91,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         try {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+            }
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(mLastKnownLocation.getLatitude(),
-                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                getDeviceLocation();
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -123,6 +126,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             // Set the map's camera position to the current location of the device.
                             Log.i("maps", "location successfully found");
                             mLastKnownLocation = (Location)task.getResult();
+                            Log.i("maps", mLastKnownLocation.toString());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(mLastKnownLocation.getLatitude(),
+                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         } else {
                             Log.d("map", "Current location is null. Using defaults.");
                             Log.e("map", "Exception: %s", task.getException());
@@ -162,6 +169,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
+//        getDeviceLocation();
     }
 }

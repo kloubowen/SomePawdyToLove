@@ -74,7 +74,7 @@ public class PetJson {
     }
 
     // Create shelter class and switch Object to Shelter
-    public static Object jsonToShelter(JSONObject jo){
+    public static Shelter jsonToShelter(JSONObject jo){
         return null;
     }
 

@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements PetJson.IPetJson {
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     public static ArrayList<Pet> savedPets;
     public static String AppName = "SomePawdyToLove";
     private PetFetcher petFetcher;
+    private HashMap<String, String> mySettings;
     private Net net;
     private Pet currentPet;
 
@@ -30,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        net = Net.getInstance();
 
         //Set up listeners
         FloatingActionButton rejectButton = findViewById(R.id.floatingReject);
@@ -52,8 +54,19 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 
         savedPets = new ArrayList<>();
         petFetcher = new PetFetcher();
+        initMySettings();
+
         Net.init(getApplicationContext());
+        net = Net.getInstance();
         petFetcher.getRandomPet(null, null, null, "78705", this);
+    }
+
+    private void initMySettings(){
+        mySettings = new HashMap<>();
+        mySettings.put("Age", null);
+        mySettings.put("Species", null);
+        mySettings.put("Breed", null);
+        mySettings.put("Sex", null);
     }
 
     @Override
@@ -70,7 +83,11 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 //        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
 //        petFetcher.findPets(null, null, null, "78705", null, this);
 //        petFetcher.getShelter("CA790", this);
+
         petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
+        savedPets.add(currentPet);
+        petFetcher.getRandomPet(null, null, null, "78705", this);
+
         //todo: save pet
         //todo: load new pet
         //todo: updatePetUI(pet);
@@ -106,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         switch (item.getItemId()) {
             case R.id.action_settings:
                 //todo: load settings
+                Intent settingsIntent = new Intent(this, Settings.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("CurrentSettings", mySettings);
+                settingsIntent.putExtras(bundle);
+                startActivityForResult(settingsIntent, SETTINGS_ACTIVITY);
                 return true;
             case R.id.action_map:
                 Intent i = new Intent(this, MapsActivity.class);
@@ -115,11 +137,22 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                 return true;
             case R.id.action_saved:
                 //todo: load saved
-                Intent saved = new Intent(this, SavedPets.class);
-                startActivity(saved);
+                Intent savedIntent = new Intent(this, SavedPets.class);
+                startActivity(savedIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SETTINGS_ACTIVITY){
+            if (resultCode == RESULT_OK){
+                mySettings = (HashMap<String, String>) data.getExtras()
+                        .getSerializable("UpdatedSettings");
+                Log.i("Settings", mySettings.toString());
+            }
         }
     }
 

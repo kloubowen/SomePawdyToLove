@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="animals">
+        <item>"Choose a animal species"</item>
+        <item>Barnyard</item>
+        <item>Bird</item>
+        <item>Cat</item>
+        <item>Dog</item>
+        <item>Horse</item>
+        <item>Reptile</item>
+        <item>Smallfurry</item>
+    </string-array>
+
+</resources>

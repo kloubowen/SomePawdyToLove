@@ -29,6 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".SavedPets"
             android:label="Your Saved Pets"
@@ -58,6 +59,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"> </activity>
+
+        <activity
+            android:name=".Settings"
+            android:label="Settings"> </activity>
 
 
     </application>
