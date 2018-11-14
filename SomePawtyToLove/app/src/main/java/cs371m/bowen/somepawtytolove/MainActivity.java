@@ -86,7 +86,14 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 
         petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
         savedPets.add(currentPet);
-        petFetcher.getRandomPet(null, null, null, "78705", this);
+
+        String species = mySettings.get("Species");
+        if (species != null){
+            species = species.toLowerCase();
+        }
+        String breed = mySettings.get("Breed");
+        String sex = mySettings.get("Sex");
+        petFetcher.getRandomPet(species, breed, sex, "78705", this);
 
         //todo: save pet
         //todo: load new pet
@@ -96,7 +103,14 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     protected void rejectPet() {
        // Toast toast = Toast.makeText(this, "rejecting pets not yet implemented", Toast.LENGTH_SHORT);
         //toast.show();
-        petFetcher.getRandomPet(null, null, null, "78705", this);
+        String species = mySettings.get("Species");
+        if (species != null){
+            species = species.toLowerCase();
+            Log.i("reject", species);
+        }
+        String breed = mySettings.get("Breed");
+        String sex = mySettings.get("Sex");
+        petFetcher.getRandomPet(species, breed, sex, "78705", this);
         //todo: load new pet
         //todo: updatePetUI(pet);
     }

@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.support.v7.widget.RecyclerView.NO_POSITION;
+
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolder> {
     private ArrayList<Pet> pets;
     private Context context;
@@ -27,8 +29,6 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
             name = theView.findViewById(R.id.name);
             breed = theView.findViewById(R.id.breed);
             location = theView.findViewById(R.id.location);
-//            Pet pet = pets.get(getAdapterPosition());
-//            Net.getInstance().glideFetch(pet.getPic(), thumbnail);
             // possibly set an on click listener to pull up more info on pet
             //find a way to set email to link to email
         }
@@ -52,7 +52,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
         holder.location.setText(pet.getLocation());
         holder.breed.setText(pet.getBreed());
         holder.name.setText(pet.getName());
-        //use glide to set image
+        Net.getInstance().glideFetch(pet.getPic(), holder.thumbnail);
     }
 
     @Override
