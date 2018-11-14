@@ -1,5 +1,7 @@
 package cs371m.bowen.somepawtytolove;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class Pet {
@@ -17,6 +19,7 @@ public class Pet {
     private String id;
     private String shelterid;
     private ArrayList<String> picUrls;
+    private int picIndex;
 
     public Pet(String name, String breed, String zip, String age){
         this.name = name;
@@ -24,6 +27,7 @@ public class Pet {
         this.zip = zip;
         picUrls = new ArrayList<>();
         this.age = age;
+        picIndex = -1;
     }
 
     public String getAge(){
@@ -49,7 +53,11 @@ public class Pet {
     public String getPic() {
         if(picUrls.isEmpty())
             return null;
-        return picUrls.get(0);
+        picIndex+=2;
+        if (picIndex >= picUrls.size()){
+            picIndex = 0;
+        }
+        return picUrls.get(picIndex);
     }
 
     public String getDescription() {
