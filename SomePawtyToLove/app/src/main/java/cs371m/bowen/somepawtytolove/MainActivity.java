@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         //toast.show();
 //        petFetcher.getBreeds("cat", this);
 //        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
-//        petFetcher.findPets(null, null, null, "78705", null, this);
+//        petFetcher.findPets(species, breed, sex, "Austin, Texas", null, this);
 //        petFetcher.getShelter("CA790", this);
         disableButtons();
 
@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         TextView age = findViewById(R.id.ageTxt);
         setTxtOr(age, currentPet.getAge(), "Age Unknown");
         TextView bio = findViewById(R.id.descriptionTxt);
+        bio.setMovementMethod(new ScrollingMovementMethod());
         setTxtOr(bio, currentPet.getDescription(), "");
         ImageView pic = findViewById(R.id.profileImage);
 

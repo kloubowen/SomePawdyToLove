@@ -234,7 +234,7 @@ public class PetFetcher {
     }
 
     // Use this to print Json
-//     + response.toString().substring(0, response.toString().length()/3));
+//     + response.toString().substring(0, response.toString().length()/5));
 //    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5, 2*response.toString().length()/5));
 //    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5*2, 3*response.toString().length()/5));
 //    Log.i("Request", "Responded " + response.toString().substring(response.toString().length()/5*3, 4*response.toString().length()/5));
