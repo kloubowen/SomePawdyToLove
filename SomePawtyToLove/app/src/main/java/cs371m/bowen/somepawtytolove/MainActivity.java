@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     private HashMap<String, String> mySettings;
     private Net net;
     private Pet currentPet;
+    private FloatingActionButton rejectButton, saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +36,14 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         setContentView(R.layout.activity_main);
 
         //Set up listeners
-        FloatingActionButton rejectButton = findViewById(R.id.floatingReject);
+        rejectButton = findViewById(R.id.floatingReject);
         rejectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 rejectPet();
             }
         });
 
-        FloatingActionButton saveButton = findViewById(R.id.floatingSave);
+        saveButton = findViewById(R.id.floatingSave);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 savePet();
@@ -81,10 +82,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         //toast.show();
 //        petFetcher.getBreeds("cat", this);
 //        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
-//        petFetcher.findPets(null, null, null, "78705", null, this);
+//        petFetcher.findPets(species, breed, sex, "Austin, Texas", null, this);
 //        petFetcher.getShelter("CA790", this);
+        disableButtons();
 
         //petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
+
         savedPets.add(currentPet);
 
         String species = mySettings.get("Species");
@@ -118,18 +121,20 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     protected void updatePetUI(Pet pet) {
         currentPet = pet;
         TextView name = findViewById(R.id.nameTxt);
-        setTxtOr(name, pet.getName(), "No Name");
+        setTxtOr(name, currentPet.getName(), "No Name");
         TextView type = findViewById(R.id.speciesTxt);
-        setTxtOr(type, pet.getBreed(), "Breed Unknown");
+        setTxtOr(type, currentPet.getBreed(), "Breed Unknown");
         TextView location = findViewById(R.id.locationTxt);
-        setTxtOr(location, pet.getLocation(), "Location Unknown");
+        setTxtOr(location, currentPet.getLocation(), "Location Unknown");
         TextView age = findViewById(R.id.ageTxt);
-        setTxtOr(age, pet.getAge(), "Age Unknown");
+        setTxtOr(age, currentPet.getAge(), "Age Unknown");
         TextView bio = findViewById(R.id.descriptionTxt);
-        setTxtOr(bio, pet.getDescription(), "");
+        bio.setMovementMethod(new ScrollingMovementMethod());
+        setTxtOr(bio, currentPet.getDescription(), "");
         ImageView pic = findViewById(R.id.profileImage);
 
-        net.glideFetch(pet.getPic(), pic);
+        net.glideFetch(currentPet.getPic(), pic);
+        enableButtons();
     }
 
 
@@ -206,4 +211,19 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
             view.setText(alternate);
     }
 
+    private void disableButtons(){
+        rejectButton.setVisibility(View.INVISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void enableButtons(){
+        rejectButton.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.VISIBLE);
+    }
+
+    public void changePic(View view){
+        ImageView image = view.findViewById(R.id.profileImage);
+        String url = currentPet.getPic();
+        net.glideFetch(url, image);
+    }
 }
