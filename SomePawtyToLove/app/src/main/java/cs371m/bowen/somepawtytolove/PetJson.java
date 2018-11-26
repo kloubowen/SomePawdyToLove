@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class PetJson {
         void fetchPet(Pet pet);
         void fetchPetList(ArrayList<Pet> pets);
         void fetchBreedList(ArrayList<String> breeds);
-        void fetchShelter(Object shelter);
-        void fetchShelterList(Object shelters);
+        void fetchShelter(Shelter shelter);
+        void fetchShelterList(ArrayList<Shelter> shelters);
     }
 
     public static Pet jsonToPet(JSONObject jO){
@@ -60,7 +61,7 @@ public class PetJson {
                 Log.i("pet", "parsed new pet");
             return mPet;
         } catch (JSONException error) {
-            Log.d("Error", "JSON parsing");
+            Log.d("Error", "JSON parsing pet record");
         }
 
 
@@ -74,12 +75,43 @@ public class PetJson {
     }
 
     // Create shelter class and switch Object to Shelter
-    public static Shelter jsonToShelter(JSONObject jo){
-        return null;
+    public static Shelter jsonToShelter(JSONObject jO){
+        Shelter shelter = null;
+        try{
+            String name = jO.getJSONObject("name").getString("$t");
+            String street = jO.getJSONObject("address1").getString("$t");
+            String city = jO.getJSONObject("city").getString("$t");
+            String state = jO.getJSONObject("state").getString("$t");
+            String zip = jO.getJSONObject("zip").getString("$t");
+            String id = jO.getJSONObject("id").getString("$t");
+            shelter = new Shelter(name, street + ", " + city + ", " + state + " " + zip, null);
+
+            String lat = jO.getJSONObject("latitude").getString("$t");
+            String lng = jO.getJSONObject("longitude").getString("$t");
+            shelter.setLatLng(lat, lng);
+        } catch (JSONException error) {
+            Log.d("Error", "JSON parsing shelter");
+        }
+        return shelter;
     }
 
-    public static ArrayList<Object> jsonToShelterList(JSONObject jo){
-        return null;
+    public static ArrayList<Shelter> jsonToShelterList(JSONObject jO){
+        Log.d("list json", jO.toString());
+        ArrayList<Shelter> shelterList = new ArrayList<>();
+        try{
+            JSONArray shelters = jO.getJSONObject("petfinder").getJSONObject("shelters").getJSONArray("shelter");
+            for(int x = 0; x<shelters.length(); x++) {
+                Shelter s = jsonToShelter(shelters.getJSONObject(x));
+
+                if(s!=null) {
+                    Log.d("shelter", s.getName());
+                    shelterList.add(s);
+                }
+            }
+        } catch (JSONException error) {
+            Log.d("Error", "JSON parsing shelter list");
+        }
+        return shelterList;
     }
 
     public static ArrayList<String> jsonToBreed(JSONObject jO){

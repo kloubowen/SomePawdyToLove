@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 //        petFetcher.findPets(null, null, null, "78705", null, this);
 //        petFetcher.getShelter("CA790", this);
 
-        petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
+        //petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
         savedPets.add(currentPet);
 
         String species = mySettings.get("Species");
@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 
         net.glideFetch(pet.getPic(), pic);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -189,12 +190,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     }
 
     @Override
-    public void fetchShelter(Object shelter) {
+    public void fetchShelter(Shelter shelter) {
 
     }
 
     @Override
-    public void fetchShelterList(Object shelters) {
+    public void fetchShelterList(ArrayList<Shelter> shelters) {
 
     }
 
