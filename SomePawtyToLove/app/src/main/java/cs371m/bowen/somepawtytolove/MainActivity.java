@@ -210,13 +210,13 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     }
 
     private void disableButtons(){
-        rejectButton.setVisibility(View.INVISIBLE);
-        saveButton.setVisibility(View.INVISIBLE);
+        rejectButton.setClickable(false);
+        saveButton.setClickable(false);
     }
 
     private void enableButtons(){
-        rejectButton.setVisibility(View.VISIBLE);
-        saveButton.setVisibility(View.VISIBLE);
+        rejectButton.setClickable(true);
+        saveButton.setClickable(true);
     }
 
     public void changePic(View view){

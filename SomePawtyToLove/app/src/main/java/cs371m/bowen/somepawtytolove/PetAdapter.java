@@ -1,6 +1,7 @@
 package cs371m.bowen.somepawtytolove;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
         TextView name;
         TextView breed;
         TextView location;
+        String email;
 
         public DynamicViewHolder(View theView) {
             super(theView);
@@ -30,7 +32,17 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
             breed = theView.findViewById(R.id.breed);
             location = theView.findViewById(R.id.location);
             // possibly set an on click listener to pull up more info on pet
-            //find a way to set email to link to email
+            TextView emailText = theView.findViewById(R.id.email);
+            emailText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    emailIntent.setType("message/rfc822");
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Pet Adoption");
+                    context.startActivity(Intent.createChooser(emailIntent, "Choose email client"));
+                }
+            });
         }
     }
 
@@ -52,6 +64,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
         holder.location.setText(pet.getLocation());
         holder.breed.setText(pet.getBreed());
         holder.name.setText(pet.getName());
+        holder.email = "example@example.com";
         Net.getInstance().glideFetch(pet.getPic(), holder.thumbnail);
     }
 
