@@ -135,12 +135,12 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
     }
 
     @Override
-    public void fetchShelter(Object shelter) {
+    public void fetchShelter(Shelter shelter) {
 
     }
 
     @Override
-    public void fetchShelterList(Object shelters) {
+    public void fetchShelterList(ArrayList<Shelter> shelters) {
 
     }
 

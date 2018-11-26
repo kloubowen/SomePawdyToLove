@@ -159,7 +159,8 @@ public class PetFetcher {
         builder.appendPath(FIND_SHELTERS)
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(LOCATION, location)
-                .appendQueryParameter(FORMAT, JSON);
+                .appendQueryParameter(FORMAT, JSON)
+                .appendQueryParameter("count", "5");
         fetchJSON(FIND_SHELTERS_ID, callback);
     }
 

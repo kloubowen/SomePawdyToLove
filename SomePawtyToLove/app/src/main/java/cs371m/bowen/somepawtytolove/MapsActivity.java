@@ -2,6 +2,8 @@ package cs371m.bowen.somepawtytolove;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
@@ -24,7 +26,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.LocationServices;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, PetJson.IPetJson {
 
     private GoogleMap mMap;
     private LocationManager locationManager;
@@ -34,11 +41,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
     final int DEFAULT_ZOOM = 10;
     private Location mLastKnownLocation;
+    private PetFetcher petFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        petFetcher = new PetFetcher();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -130,6 +139,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+                            try {
+                                Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+                                List<Address> addresses = geocoder.getFromLocation(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 1);
+//                                String cityName = addresses.get(0).getAddressLine(0);
+//                                String stateName = addresses.get(0).getAddressLine(1);
+//                                String countryName = addresses.get(0).getAddressLine(2);
+                                //Log.d("location of person", cityName+", "+stateName);
+                                petFetcher.findShelters("Austin, TX", MapsActivity.this);
+
+                            } catch (IOException e) {
+                                Log.e("error", "getting address");
+                            }
+
                         } else {
                             Log.d("map", "Current location is null. Using defaults.");
                             Log.e("map", "Exception: %s", task.getException());
@@ -170,5 +193,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Get the current location of the device and set the position of the map.
 //        getDeviceLocation();
+
+    }
+
+    @Override
+    public void fetchPet(Pet pet) {
+
+    }
+
+    @Override
+    public void fetchPetList(ArrayList<Pet> pets) {
+    }
+
+    @Override
+    public void fetchBreedList(ArrayList<String> breeds) {
+        // Intentionally left blank. Only Setting should deal with breeds.
+    }
+
+    @Override
+    public void fetchShelter(Shelter shelter) {
+
+    }
+
+    @Override
+    public void fetchShelterList(ArrayList<Shelter> shelters) {
+        if(mMap==null)
+            return;
+        for(Shelter s : shelters) {
+            //Log.d("found", s.getName());
+            MarkerOptions mo = new MarkerOptions();
+            mo.position(s.getMapLocation());
+            mo.title(s.getName());
+            mMap.addMarker(mo);
+        }
+        if(!shelters.isEmpty())
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(shelters.get(0).getMapLocation(), DEFAULT_ZOOM));
     }
 }
