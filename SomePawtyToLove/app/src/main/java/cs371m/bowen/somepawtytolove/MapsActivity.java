@@ -147,7 +147,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                                String stateName = addresses.get(0).getAddressLine(1);
 //                                String countryName = addresses.get(0).getAddressLine(2);
                                 //Log.d("location of person", cityName+", "+stateName);
-                                petFetcher.findShelters("Austin, TX", MapsActivity.this);
+                                String city = addresses.get(0).getLocality();
+                                String state = addresses.get(0).getAdminArea();
+                                if (city == null || state == null){
+                                    throw new IOException();
+                                }
+                                String cityState = city + ", " + state;
+                                Log.i("Finding Shelters", "Location: " + cityState);
+                                petFetcher.findShelters(cityState, MapsActivity.this);
 
                             } catch (IOException e) {
                                 Log.e("error", "getting address");

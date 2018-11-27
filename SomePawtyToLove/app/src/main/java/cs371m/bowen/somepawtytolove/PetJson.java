@@ -46,8 +46,10 @@ public class PetJson {
                 String zip = contact.getJSONObject("zip").getString("$t");
                 String city = contact.getJSONObject("city").getString("$t");
                 String state = contact.getJSONObject("state").getString("$t");
+                String email = contact.getJSONObject("email").getString("$t");
                 Pet mPet = new Pet(name, breed, zip, age);
                 mPet.setCityState(city, state);
+                mPet.setEmail(email);
 
                 mPet.setDescription(petObj.getJSONObject("description").getString("$t"));
                 JSONArray photos = petObj.getJSONObject("media").getJSONObject("photos").getJSONArray("photo");
@@ -71,6 +73,21 @@ public class PetJson {
     }
 
     public static ArrayList<Pet> jsonToPetList(JSONObject jo){
+        Log.d("list json", jo.toString());
+        ArrayList<Pet> petList = new ArrayList<>();
+        try{
+            JSONArray pets = jo.getJSONObject("petfinder").getJSONObject("pets").getJSONArray("pet");
+            for(int x = 0; x<pets.length(); x++) {
+                Pet p = null;
+                if(p!=null) {
+                    Log.d("shelter", p.getName());
+                    petList.add(p);
+                }
+            }
+        } catch (JSONException error) {
+            Log.d("Error", "JSON parsing shelter list");
+        }
+//        return shelterList;
         return null;
     }
 
@@ -79,18 +96,24 @@ public class PetJson {
         Shelter shelter = null;
         try{
             String name = jO.getJSONObject("name").getString("$t");
-            String street = jO.getJSONObject("address1").getString("$t");
+            String street = jO.getJSONObject("address1").optString("$t");
             String city = jO.getJSONObject("city").getString("$t");
             String state = jO.getJSONObject("state").getString("$t");
             String zip = jO.getJSONObject("zip").getString("$t");
             String id = jO.getJSONObject("id").getString("$t");
-            shelter = new Shelter(name, street + ", " + city + ", " + state + " " + zip, null);
+            String address;
+            if (street.isEmpty()){
+                address = city + ", " + state + " " + zip;
+            } else {
+                address = street + ", " + city + ", " + state + " " + zip;
+            }
+            shelter = new Shelter(name, address, id);
 
             String lat = jO.getJSONObject("latitude").getString("$t");
             String lng = jO.getJSONObject("longitude").getString("$t");
             shelter.setLatLng(lat, lng);
         } catch (JSONException error) {
-            Log.d("Error", "JSON parsing shelter");
+            Log.d("Error", "JSON parsing shelter" + error.toString());
         }
         return shelter;
     }

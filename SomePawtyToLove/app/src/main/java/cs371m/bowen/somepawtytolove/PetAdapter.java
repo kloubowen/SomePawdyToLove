@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -36,11 +37,15 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
             emailText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    emailIntent.setType("message/rfc822");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Pet Adoption");
-                    context.startActivity(Intent.createChooser(emailIntent, "Choose email client"));
+                    if (email != null){
+                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                        emailIntent.setType("message/rfc822");
+                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Pet Adoption");
+                        context.startActivity(Intent.createChooser(emailIntent, "Choose email client"));
+                    } else {
+                        Toast.makeText(context, "Email unavailable", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -64,7 +69,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
         holder.location.setText(pet.getLocation());
         holder.breed.setText(pet.getBreed());
         holder.name.setText(pet.getName());
-        holder.email = "example@example.com";
+        holder.email = pet.getEmail();
         Net.getInstance().glideFetch(pet.getPic(), holder.thumbnail);
     }
 

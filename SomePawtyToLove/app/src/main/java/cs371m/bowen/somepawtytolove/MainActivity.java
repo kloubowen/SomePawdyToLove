@@ -8,6 +8,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+@SuppressWarnings("ClickableViewAccessibility")
 public class MainActivity extends AppCompatActivity implements PetJson.IPetJson {
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     private Net net;
     private Pet currentPet;
     private FloatingActionButton rejectButton, saveButton;
+    private ImageView pic;
+    private float x1, x2, y1, y2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,33 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 savePet();
+            }
+        });
+
+        pic = findViewById(R.id.profileImage);
+        pic.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = event.getX();
+                        y1 = event.getY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        x2 = event.getX();
+                        y2 = event.getY();
+                        if (x1 == x2 && y1 == y2) {
+                            changePic();
+                        } else if (x1 > x2) {
+                            // Swipe Left
+                            rejectPet();
+                        } else if (x2 > x1) {
+                            // Swipe Right
+                            savePet();
+                        }
+                        return true;
+                }
+                return false;
             }
         });
 
@@ -82,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         //toast.show();
 //        petFetcher.getBreeds("cat", this);
 //        petFetcher.getRandomPet(null, null, null, "Austin, TX", this);
-//        petFetcher.findPets(species, breed, sex, "Austin, Texas", null, this);
 //        petFetcher.getShelter("CA790", this);
         disableButtons();
 
@@ -96,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         }
         String breed = mySettings.get("Breed");
         String sex = mySettings.get("Sex");
+//        String age =mySettings.get("Age");
+//        petFetcher.findPets(species, breed, sex, "Austin, Texas", age, this);
         petFetcher.getRandomPet(species, breed, sex, "78705", this);
 
         //todo: save pet
@@ -131,8 +162,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         TextView bio = findViewById(R.id.descriptionTxt);
         bio.setMovementMethod(new ScrollingMovementMethod());
         setTxtOr(bio, currentPet.getDescription(), "");
-        ImageView pic = findViewById(R.id.profileImage);
-
         net.glideFetch(currentPet.getPic(), pic);
         enableButtons();
     }
@@ -209,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
             view.setText(txt);
         else
             view.setText(alternate);
+        view.scrollTo(0, 0);
     }
 
     private void disableButtons(){
@@ -221,9 +251,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         saveButton.setClickable(true);
     }
 
-    public void changePic(View view){
-        ImageView image = view.findViewById(R.id.profileImage);
+    public void changePic(){
         String url = currentPet.getPic();
-        net.glideFetch(url, image);
+        net.glideFetch(url, pic);
     }
 }

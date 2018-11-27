@@ -10,28 +10,31 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-//@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings("FieldCanBeLocal")
 public class PetFetcher {
     // Key
     private final String MY_KEY = "57b5bace4f4f4f114e806f0a13bb422a";
 
     // Api methods
+    enum Methods{
+        BREEDS_ID,
+        SINGLE_PET_ID,
+        RANDOM_PET_ID,
+        FIND_PETS_ID,
+        SINGLE_SHELTER_ID,
+        FIND_SHELTERS_ID,
+        SHELTER_PETS_ID,
+        BREED_SHELTERS_ID
+    }
+
     private final String BREEDS = "breed.list";
-    private final int BREEDS_ID = 1;
     private final String SINGLE_PET = "pet.get";
-    private final int SINGLE_PET_ID = 2;
     private final String RANDOM_PET = "pet.getRandom";
-    private final int RANDOM_PET_ID = 3;
     private final String FIND_PETS = "pet.find";
-    private final int FIND_PETS_ID = 4;
     private final String SINGLE_SHELTER = "shelter.get";
-    private final int SINGLE_SHELTER_ID = 5;
     private final String FIND_SHELTERS = "shelter.find";
-    private final int FIND_SHELTERS_ID = 6;
     private final String SHELTER_PETS = "shelter.getPets";
-    private final int SHELTER_PETS_ID = 7;
     private final String BREED_SHELTERS = "shelter.listByBreed";
-    private final int BREED_SHELTERS_ID = 8;
 
     // Url variables
     private Uri.Builder builder;
@@ -61,7 +64,7 @@ public class PetFetcher {
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(ANIMAL, species.toLowerCase())
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(BREEDS_ID, callback);
+        fetchJSON(Methods.BREEDS_ID, callback);
     }
 
     public void getPet(String petId, PetJson.IPetJson callback){
@@ -74,7 +77,7 @@ public class PetFetcher {
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(ID, petId)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(SINGLE_PET_ID, callback);
+        fetchJSON(Methods.SINGLE_PET_ID, callback);
     }
 
     public void getRandomPet(String species, String breed, String sex, String location,
@@ -101,7 +104,7 @@ public class PetFetcher {
         builder.appendQueryParameter(LOCATION, location)
                 .appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(RANDOM_PET_ID, callback);
+        fetchJSON(Methods.RANDOM_PET_ID, callback);
     }
 
     public void findPets(String species, String breed, String sex, String location, String age,
@@ -134,7 +137,7 @@ public class PetFetcher {
 
         builder.appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(FIND_PETS_ID, callback);
+        fetchJSON(Methods.FIND_PETS_ID, callback);
     }
 
     public void getShelter(String shelterId, PetJson.IPetJson callback){
@@ -147,7 +150,7 @@ public class PetFetcher {
                 .appendQueryParameter(KEY, MY_KEY)
                 .appendQueryParameter(ID, shelterId)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(SINGLE_SHELTER_ID, callback);
+        fetchJSON(Methods.SINGLE_SHELTER_ID, callback);
     }
 
     public void findShelters(String location, PetJson.IPetJson callback){
@@ -161,7 +164,7 @@ public class PetFetcher {
                 .appendQueryParameter(LOCATION, location)
                 .appendQueryParameter(FORMAT, JSON)
                 .appendQueryParameter("count", "5");
-        fetchJSON(FIND_SHELTERS_ID, callback);
+        fetchJSON(Methods.FIND_SHELTERS_ID, callback);
     }
 
     public void getPetsFromShelter(String shelterId, PetJson.IPetJson callback){
@@ -175,7 +178,7 @@ public class PetFetcher {
                 .appendQueryParameter(ID, shelterId)
                 .appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(SHELTER_PETS_ID, callback);
+        fetchJSON(Methods.SHELTER_PETS_ID, callback);
     }
 
     public void getSheltersWithBreed(String species, String breed, PetJson.IPetJson callback){
@@ -189,10 +192,10 @@ public class PetFetcher {
                 .appendQueryParameter(ANIMAL, species)
                 .appendQueryParameter(BREED, breed)
                 .appendQueryParameter(FORMAT, JSON);
-        fetchJSON(BREED_SHELTERS_ID, callback);
+        fetchJSON(Methods.BREED_SHELTERS_ID, callback);
     }
 
-    private void fetchJSON(final int functionID, final PetJson.IPetJson callback){
+    private void fetchJSON(final Methods functionID, final PetJson.IPetJson callback){
         final String url = builder.build().toString();
         Log.d("uri", url);
         Request request = new JsonObjectRequest(Request.Method.GET, url, null,

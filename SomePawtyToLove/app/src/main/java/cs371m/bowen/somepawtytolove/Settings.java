@@ -20,8 +20,7 @@ import java.util.HashMap;
 
 public class Settings extends AppCompatActivity implements PetJson.IPetJson {
     private Spinner species, breeds;
-    private RadioButton baby, adult, senior;
-    private RadioGroup sex;
+    private RadioGroup sex, age;
     private PetFetcher petFetcher;
     private TextView message;
     private String[] speciesList;
@@ -40,10 +39,8 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
         petFetcher = new PetFetcher();
         species = findViewById(R.id.species_spinner);
         breeds = findViewById(R.id.breed_spinner);
-        baby = findViewById(R.id.settings_baby);
-        adult = findViewById(R.id.settings_adult);
-        senior = findViewById(R.id.settings_senior);
         sex = findViewById(R.id.sex_group);
+        age = findViewById(R.id.age_group);
         message = findViewById(R.id.breed_message);
 
         ArrayAdapter<CharSequence> speciesAdapter = ArrayAdapter.createFromResource(this,
@@ -55,10 +52,12 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
     }
 
     private void setSettings(){
-        String age = mySettings.get("Age");
-        if (age != null){
-            switch (age){
-
+        String myAge = mySettings.get("Age");
+        if (myAge != null){
+            switch (myAge){
+                case "Baby": age.check(R.id.baby);break;
+                case "Adult": age.check(R.id.adult);break;
+                case "Senior": age.check(R.id.senior);break;
             }
         }
 
@@ -87,16 +86,25 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
                 mySettings.put("Breed", breedList[breeds.getSelectedItemPosition()]);
             }
         }
+
         switch (sex.getCheckedRadioButtonId()){
             case R.id.male: mySettings.put("Sex", "male");break;
             case R.id.female: mySettings.put("Sex", "female");break;
             case R.id.both: mySettings.put("Sex", null);break;
         }
+
+        switch (age.getCheckedRadioButtonId()){
+            case R.id.baby: mySettings.put("Age", "Baby");break;
+            case R.id.adult: mySettings.put("Age", "Adult");break;
+            case R.id.senior: mySettings.put("Age", "Senior");break;
+            case R.id.all_age: mySettings.put("Age", null);break;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("UpdatedSettings", mySettings);
         result.putExtras(bundle);
         setResult(RESULT_OK, result);
-        Log.i("Settings", "sjd;fjhakus;djhfakjehgkjawhe;g");
+        Log.i("Settings", "Applied");
         finish();
     }
 
