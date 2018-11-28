@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "624387069458",
+    "firebase_url": "https://somepawtytolove.firebaseio.com",
+    "project_id": "somepawtytolove",
+    "storage_bucket": "somepawtytolove.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624387069458:android:a6b2558abbb643a1",
+        "android_client_info": {
+          "package_name": "cs371m.bowen.somepawtytolove"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624387069458-82vnu6tfg79pepgt6hk5m0q2rukp2sn2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cs371m.bowen.somepawtytolove",
+            "certificate_hash": "76300510b176eeca2b679b735bbb0936ed8890ef"
+          }
+        },
+        {
+          "client_id": "624387069458-hn7cjrn3tt516o6ubejsj2q59vci0m0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0zBuZttSWroChz4Tv2tdzTZCQPmtErws"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624387069458-hn7cjrn3tt516o6ubejsj2q59vci0m0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
