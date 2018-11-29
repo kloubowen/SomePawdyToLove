@@ -31,16 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static cs371m.bowen.somepawtytolove.MainActivity.cityState;
+import static cs371m.bowen.somepawtytolove.MainActivity.mLastKnownLocation;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, PetJson.IPetJson {
 
     private GoogleMap mMap;
-    private LocationManager locationManager;
-    private boolean mLocationPermissionGranted;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    private LatLng mDefaultLocation;
-    final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
     final int DEFAULT_ZOOM = 10;
-    private Location mLastKnownLocation;
     private PetFetcher petFetcher;
 
     @Override
@@ -53,45 +50,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        mDefaultLocation = new LatLng(-34, 151);
-
-    }
-
-    //code from documentation: https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    //code from documentation: https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-                }
-            }
-        }
-        updateLocationUI();
     }
 
     public void updateLocationUI() {
@@ -100,21 +58,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         try {
-            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                mLocationPermissionGranted = true;
-            }
-            if (mLocationPermissionGranted) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                getDeviceLocation();
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
-                getLocationPermission();
-            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            getDeviceLocation();
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
@@ -125,54 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
          */
-        try {
-            if (mLocationPermissionGranted) {
-                Task locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            Log.i("maps", "location successfully found");
-                            mLastKnownLocation = (Location)task.getResult();
-                            Log.i("maps", mLastKnownLocation.toString());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-
-                            try {
-                                Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
-                                List<Address> addresses = geocoder.getFromLocation(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 1);
-//                                String cityName = addresses.get(0).getAddressLine(0);
-//                                String stateName = addresses.get(0).getAddressLine(1);
-//                                String countryName = addresses.get(0).getAddressLine(2);
-                                //Log.d("location of person", cityName+", "+stateName);
-                                String city = addresses.get(0).getLocality();
-                                String state = addresses.get(0).getAdminArea();
-                                if (city == null || state == null){
-                                    throw new IOException();
-                                }
-                                String cityState = city + ", " + state;
-                                Log.i("Finding Shelters", "Location: " + cityState);
-                                petFetcher.findShelters(cityState, MapsActivity.this);
-
-                            } catch (IOException e) {
-                                Log.e("error", "getting address");
-                            }
-
-                        } else {
-                            Log.d("map", "Current location is null. Using defaults.");
-                            Log.e("map", "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });
-            } else
-                Log.i("map", "permission not granted");
-        } catch(SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(mLastKnownLocation.getLatitude(),
+                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+        petFetcher.findShelters(cityState, MapsActivity.this);
     }
 
 

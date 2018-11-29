@@ -51,6 +51,7 @@ public class PetFetcher {
     private final String OUTPUT = "output";
     private final String FULL = "full";
     private final String AGE = "age";
+    private final String OFFSET = "offset";
 
     private final String TAG = "Fetch";
 
@@ -110,30 +111,37 @@ public class PetFetcher {
     public void findPets(String species, String breed, String sex, String location, String age,
                          PetJson.IPetJson callback){
         if (location == null){
-            Log.i(TAG, "No location was given to find pets.");
+            Log.i(TAG, "Waiting for location to find pets.");
             return;
         }
         createBaseUrl();
         builder.appendPath(FIND_PETS)
                 .appendQueryParameter(KEY, MY_KEY);
 
-        if (species != null){
-            builder.appendQueryParameter(ANIMAL, species);
+        if (MainActivity.lastOffset.equals("0")){
+            if (species != null){
+                builder.appendQueryParameter(ANIMAL, species);
+            }
+
+            if (breed != null){
+                builder.appendQueryParameter(BREED, breed);
+            }
+
+            if (sex != null){
+                builder.appendQueryParameter(SEX, sex);
+            }
+
+            builder.appendQueryParameter(LOCATION, location);
+
+            if (age != null){
+                builder.appendQueryParameter(AGE, age);
+            }
+        } else{
+            builder.appendQueryParameter(LOCATION, location);
+            builder.appendQueryParameter(OFFSET, MainActivity.lastOffset);
         }
 
-        if (breed != null){
-            builder.appendQueryParameter(BREED, breed);
-        }
 
-        if (sex != null){
-            builder.appendQueryParameter(SEX, sex);
-        }
-
-        builder.appendQueryParameter(LOCATION, location);
-
-        if (age != null){
-            builder.appendQueryParameter(AGE, age);
-        }
 
         builder.appendQueryParameter(OUTPUT, FULL)
                 .appendQueryParameter(FORMAT, JSON);

@@ -23,50 +23,11 @@ public class PetJson {
         Log.d("JSON", jO.toString() );
         try {
             JSONObject finder = jO.getJSONObject("petfinder");
-                JSONObject petObj = finder.getJSONObject("pet");
-                String status = petObj.getJSONObject("status").getString("$t");
-                Log.d("status", status);
-                if(!status.equals("A"))
-                    return null;
-                String age = petObj.getJSONObject("age").getString("$t");
-                String name = petObj.getJSONObject("name").getString("$t");
-                Log.d("age", age);
-                Log.d("name", name);
-                //todo: handle breeds as list
-                JSONObject breeds = petObj.getJSONObject("breeds");
-                JSONArray breedArray = breeds.getJSONArray("breed");
-                String breed = "";
-                for(int x = 0; x < breedArray.length(); x++) {
-                    JSONObject b = breedArray.getJSONObject(x);
-                    breed+=b.getString("$t");
-                    if(x != breedArray.length()-1)
-                        breed+=", ";
-                }
-                JSONObject contact = petObj.getJSONObject("contact");
-                String zip = contact.getJSONObject("zip").getString("$t");
-                String city = contact.getJSONObject("city").getString("$t");
-                String state = contact.getJSONObject("state").getString("$t");
-                String email = contact.getJSONObject("email").getString("$t");
-                Pet mPet = new Pet(name, breed, zip, age);
-                mPet.setCityState(city, state);
-                mPet.setEmail(email);
-
-                mPet.setDescription(petObj.getJSONObject("description").getString("$t"));
-                JSONArray photos = petObj.getJSONObject("media").getJSONObject("photos").getJSONArray("photo");
-                for(int x = 0; x < photos.length(); x++) {
-                    JSONObject photo = photos.getJSONObject(x);
-                    if(photo.getString("@size").equals("x")||photo.getString("@size").equals("pn")) {
-                        String uri = photo.getString("$t");
-                        mPet.addPic(uri);
-                    }
-                }
-                Log.i("pet", "parsed new pet");
-            return mPet;
+            JSONObject petObj = finder.getJSONObject("pet");
+            return parsePet(petObj);
         } catch (JSONException error) {
             Log.d("Error", "JSON parsing pet record");
         }
-
-
 
         // This is NOT what you should return
         return null;
@@ -76,18 +37,67 @@ public class PetJson {
         Log.d("list json", jo.toString());
         ArrayList<Pet> petList = new ArrayList<>();
         try{
-            JSONArray pets = jo.getJSONObject("petfinder").getJSONObject("pets").getJSONArray("pet");
+            JSONObject petfinder = jo.getJSONObject("petfinder");
+            JSONArray pets = petfinder.getJSONObject("pets").getJSONArray("pet");
             for(int x = 0; x<pets.length(); x++) {
-                Pet p = null;
+                Pet p = parsePet(pets.getJSONObject(x));
                 if(p!=null) {
-                    Log.d("shelter", p.getName());
+                    Log.d("pets", p.getName());
                     petList.add(p);
                 }
             }
+            MainActivity.lastOffset = petfinder.getJSONObject("lastOffset").getString("$t");
+            Log.i("Petlist", "Pets Parsed: " + petList.size());
+            return petList;
         } catch (JSONException error) {
-            Log.d("Error", "JSON parsing shelter list");
+            Log.d("Error", "JSON parsing pet list");
         }
-//        return shelterList;
+        return null;
+    }
+
+    private static Pet parsePet(JSONObject petObj){
+        try {
+            String status = petObj.getJSONObject("status").getString("$t");
+            Log.d("status", status);
+            if(!status.equals("A"))
+                return null;
+            String age = petObj.getJSONObject("age").getString("$t");
+            String name = petObj.getJSONObject("name").getString("$t");
+            Log.d("age", age);
+            Log.d("name", name);
+            //todo: handle breeds as list
+            JSONObject breeds = petObj.getJSONObject("breeds");
+            JSONArray breedArray = breeds.getJSONArray("breed");
+            String breed = "";
+            for(int x = 0; x < breedArray.length(); x++) {
+                JSONObject b = breedArray.getJSONObject(x);
+                breed+=b.getString("$t");
+                if(x != breedArray.length()-1)
+                    breed+=", ";
+            }
+            JSONObject contact = petObj.getJSONObject("contact");
+            String zip = contact.getJSONObject("zip").getString("$t");
+            String city = contact.getJSONObject("city").getString("$t");
+            String state = contact.getJSONObject("state").getString("$t");
+            String email = contact.getJSONObject("email").getString("$t");
+            Pet mPet = new Pet(name, breed, zip, age);
+            mPet.setCityState(city, state);
+            mPet.setEmail(email);
+
+            mPet.setDescription(petObj.getJSONObject("description").getString("$t"));
+            JSONArray photos = petObj.getJSONObject("media").getJSONObject("photos").getJSONArray("photo");
+            for(int x = 0; x < photos.length(); x++) {
+                JSONObject photo = photos.getJSONObject(x);
+                if(photo.getString("@size").equals("x")||photo.getString("@size").equals("pn")) {
+                    String uri = photo.getString("$t");
+                    mPet.addPic(uri);
+                }
+            }
+            Log.i("pet", "parsed new pet");
+            return mPet;
+        } catch (JSONException error) {
+            Log.d("Error", "JSON parsing pet record");
+        }
         return null;
     }
 
