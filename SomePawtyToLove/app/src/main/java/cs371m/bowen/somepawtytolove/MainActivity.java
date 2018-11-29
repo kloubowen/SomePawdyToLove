@@ -17,9 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -28,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -47,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     private Pet currentPet;
     private int nextPetIndex;
     private FloatingActionButton rejectButton, saveButton;
+    private FirebaseAuth mAuth;
+
     private ImageView pic;
     private float x1, x2, y1, y2;
     private boolean mLocationPermissionGranted;
@@ -55,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     public static Location mLastKnownLocation;
     public static String cityState;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +73,14 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         initMySettings();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLocationPermission();
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser==null)
+            updateUser();
+        else
+            Log.i("authcheck", "current user: "+ currentUser.getEmail());
 
         //Set up listeners
         rejectButton = findViewById(R.id.floatingReject);
@@ -162,6 +181,21 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         mySettings.put("Breed", null);
         mySettings.put("Sex", null);
     }
+
+    public void updateUser() {
+        Log.i("authcheck", "update user called");
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(), 1);
+
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
