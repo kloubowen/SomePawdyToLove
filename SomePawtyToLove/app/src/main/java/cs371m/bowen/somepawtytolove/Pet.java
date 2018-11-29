@@ -72,4 +72,12 @@ public class Pet {
         this.city = city;
         this.state = state;
     }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public String getEmail(){
+        return email;
+    }
 }

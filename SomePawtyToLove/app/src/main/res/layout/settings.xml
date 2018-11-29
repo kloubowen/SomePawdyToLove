@@ -26,38 +26,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message" />
 
-    <RadioButton
-        android:id="@+id/settings_baby"
+    <RadioGroup
+        android:id="@+id/age_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Baby"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@id/settings_adult"
-        app:layout_constraintStart_toEndOf="@id/settings_age"
-        app:layout_constraintTop_toTopOf="@id/settings_age" />
-
-    <RadioButton
-        android:id="@+id/settings_adult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Adult"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@id/settings_senior"
-        app:layout_constraintStart_toEndOf="@id/settings_baby"
-        app:layout_constraintTop_toTopOf="@id/settings_age" />
-
-    <RadioButton
-        android:id="@+id/settings_senior"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Senior"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/settings_adult"
-        app:layout_constraintTop_toTopOf="@id/settings_age" />
+        app:layout_constraintStart_toEndOf="@id/settings_age"
+        app:layout_constraintTop_toTopOf="@id/settings_age">
+        <RadioButton
+            android:id="@+id/baby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Baby"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <RadioButton
+            android:id="@+id/adult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adult"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <RadioButton
+            android:id="@+id/senior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Senior"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+        <RadioButton
+            android:id="@+id/all_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:checked="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+    </RadioGroup>
+
+
 
     <TextView
         android:id="@+id/settings_species"
