@@ -50,6 +50,8 @@ public class Pet {
         return city + ", " + state + " " + zip;
     }
 
+    public String getID() {return id;}
+
     public String getPic() {
         if(picUrls.isEmpty())
             return null;

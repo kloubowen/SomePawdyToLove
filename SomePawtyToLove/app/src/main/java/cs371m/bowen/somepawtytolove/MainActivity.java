@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     private Pet currentPet;
     private FloatingActionButton rejectButton, saveButton;
     private FirebaseAuth mAuth;
+    private Firebase firebase;
 
     private ImageView pic;
     private float x1, x2, y1, y2;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        firebase = Firebase.getInstance();
+        firebase.init();
 
         if(currentUser==null)
             updateUser();
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         //petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
 
         savedPets.add(currentPet);
+        //firebase.savePet(currentPet);
 
         String species = mySettings.get("Species");
         if (species != null){
