@@ -64,8 +64,8 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
         String mySex = mySettings.get("Sex");
         if (mySex != null){
             switch (mySex){
-                case "male": sex.check(R.id.male);break;
-                case "female": sex.check(R.id.female);break;
+                case "M": sex.check(R.id.male);break;
+                case "F": sex.check(R.id.female);break;
             }
         }
 
@@ -88,8 +88,8 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
         }
 
         switch (sex.getCheckedRadioButtonId()){
-            case R.id.male: mySettings.put("Sex", "male");break;
-            case R.id.female: mySettings.put("Sex", "female");break;
+            case R.id.male: mySettings.put("Sex", "M");break;
+            case R.id.female: mySettings.put("Sex", "F");break;
             case R.id.both: mySettings.put("Sex", null);break;
         }
 
