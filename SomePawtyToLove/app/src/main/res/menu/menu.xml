@@ -6,16 +6,20 @@
     <item
         android:id="@+id/action_settings"
         android:title="Settings"
-        app:showAsAction="withText|always"/>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_map"
         android:title="Map"
-        app:showAsAction="withText|always"/>
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_saved"
         android:title="Saved Pets"
-        app:showAsAction="withText|always"/>
+        app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_sign_out"
+        android:title="Sign Out"
+        app:showAsAction="never"/>
 
 </menu>

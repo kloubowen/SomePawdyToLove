@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 public class SavedPets extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -21,7 +22,7 @@ public class SavedPets extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        PetAdapter petAdapter = new PetAdapter(this, MainActivity.savedPets);
+        PetAdapter petAdapter = new PetAdapter(this, recyclerView);
         recyclerView.setAdapter(petAdapter);
     }
 

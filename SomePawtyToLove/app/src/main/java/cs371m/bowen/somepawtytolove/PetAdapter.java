@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolder> {
-    private ArrayList<Pet> pets;
     private Context context;
+    private PetSwipeDetector detector;
 
     public class DynamicViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail;
@@ -48,12 +49,34 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
                     }
                 }
             });
+            theView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Add check for if swipe was detected
+                    int position = getAdapterPosition();
+                    if (position == NO_POSITION){
+                        return;
+                    }
+
+                    if (detector.swipeDetected()){
+                        Log.i("Swipe", "detected");
+                        removeItem(position);
+                    }
+                }
+            });
         }
     }
 
-    public PetAdapter(Context context, ArrayList<Pet> pets){
+    public PetAdapter(Context context, RecyclerView rv){
         this.context = context;
-        this.pets = pets;
+        detector = new PetSwipeDetector();
+        rv.addOnItemTouchListener(detector);
+    }
+
+    public void removeItem(int position){
+        MainActivity.savedPets.remove(position);
+        notifyDataSetChanged();
+        Log.i("Swipe", "Removed");
     }
 
     @NonNull
@@ -65,7 +88,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull DynamicViewHolder holder, int position) {
-        Pet pet = pets.get(position);
+        Pet pet = MainActivity.savedPets.get(position);
         holder.location.setText(pet.getLocation());
         holder.breed.setText(pet.getBreed());
         holder.name.setText(pet.getName());
@@ -75,6 +98,6 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.DynamicViewHolde
 
     @Override
     public int getItemCount() {
-        return pets.size();
+        return MainActivity.savedPets.size();
     }
 }

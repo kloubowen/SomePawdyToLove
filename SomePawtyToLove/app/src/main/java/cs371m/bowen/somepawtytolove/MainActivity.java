@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
     final int SAVED_ACTIVITY = 3;
+    final int SIGN_IN = 4;
     public static ArrayList<Pet> savedPets;
     public static String AppName = "SomePawdyToLove";
     public static String lastOffset = "0";
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     private FloatingActionButton rejectButton, saveButton;
     private FirebaseAuth mAuth;
     private Firebase firebase;
+    private FirebaseUser currentUser;
 
     private ImageView pic;
     private float x1, x2, y1, y2;
@@ -73,17 +75,19 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         setContentView(R.layout.activity_main);
         initMySettings();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        getLocationPermission();
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         firebase = Firebase.getInstance();
         firebase.init();
 
-        if(currentUser==null)
+        if(currentUser==null){
             updateUser();
-        else
+        }
+        else{
+            getLocationPermission();
             Log.i("authcheck", "current user: "+ currentUser.getEmail());
+        }
 
         //Set up listeners
         rejectButton = findViewById(R.id.floatingReject);
@@ -194,11 +198,9 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-                        .build(), 1);
+                        .build(), SIGN_IN);
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -275,6 +277,15 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
         enableButtons();
     }
 
+    protected void signOut(){
+        //maybe clear current ui
+        AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                updateUser();
+            }
+        });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -298,6 +309,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                 Intent savedIntent = new Intent(this, SavedPets.class);
                 startActivity(savedIntent);
                 return true;
+            case R.id.action_sign_out:
+                signOut();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -317,6 +330,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                     nextPetIndex = 0;
                     rejectButton.performClick();
                 }
+            }
+        } else if(requestCode == SIGN_IN){
+            if (resultCode == RESULT_OK){
+                getLocationPermission();
+            } else {
+                updateUser();
             }
         }
     }
