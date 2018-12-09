@@ -44,8 +44,11 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements PetJson.IPetJson, Settings.ISettings {
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
-    final int SAVED_ACTIVITY = 3;
-    final int SIGN_IN = 4;
+    final int LOGIN_ACTIVITY = 3;
+//    final int SIGN_IN = 4;
+    static final int NEW = 5;
+    static final int OLD = 6;
+    static final int EXITED = 6;
     public static ArrayList<Pet> savedPets;
     public static String AppName = "SomePawdyToLove";
     public static String lastOffset = "0";
@@ -188,14 +191,16 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
 
     public void updateUser() {
         Log.i("authcheck", "update user called");
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
-
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(), SIGN_IN);
+        Intent i = new Intent(this, LoginPage.class);
+        startActivityForResult(i, LOGIN_ACTIVITY);
+//        List<AuthUI.IdpConfig> providers = Arrays.asList(
+//                new AuthUI.IdpConfig.EmailBuilder().build());
+//
+//        startActivityForResult(
+//                AuthUI.getInstance()
+//                        .createSignInIntentBuilder()
+//                        .setAvailableProviders(providers)
+//                        .build(), SIGN_IN);
 
     }
 
@@ -274,6 +279,11 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
 
     protected void signOut(){
         //maybe clear current ui
+        lastOffset = "0";
+        fetchedPets = null;
+        currentPet = null;
+        nextPetIndex = 0;
+        mySettings = null;
         AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -326,10 +336,20 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
                     rejectButton.performClick();
                 }
             }
-        } else if(requestCode == SIGN_IN){
+//        } else if(requestCode == SIGN_IN){
+//            if (resultCode == RESULT_OK){
+//                initMySettings();
+//                getLocationPermission();
+//            } else {
+//                updateUser();
+//            }
+        } else if (requestCode == LOGIN_ACTIVITY){
             if (resultCode == RESULT_OK){
-                initMySettings();
+//                initMySettings();
+                Firebase.changeUser();
                 getLocationPermission();
+            } else if (resultCode == EXITED){
+                finish();
             } else {
                 updateUser();
             }
