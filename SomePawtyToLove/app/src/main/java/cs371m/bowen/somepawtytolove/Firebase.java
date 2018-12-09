@@ -45,6 +45,10 @@ public class Firebase {
         Holder.helper.db.setFirestoreSettings(settings);
     }
 
+    public static void changeUser(){
+        Holder.helper.user = FirebaseAuth.getInstance().getCurrentUser();
+    }
+
     public void savePet(Pet pet) {
         db.collection("users").
                 document(user.getUid()).
@@ -109,7 +113,7 @@ public class Firebase {
                     settings.put("Species", null);
                     settings.put("Breed", null);
                     settings.put("Sex", null);
-                    if (doc != null){
+                    if (doc.exists()){
                         Log.i("Settings", doc.getData().toString());
                         if (doc.get("Age") != null){
                             settings.put("Age", doc.get("Age").toString());

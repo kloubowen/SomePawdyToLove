@@ -64,6 +64,9 @@
             android:name=".Settings"
             android:label="Settings"> </activity>
 
+        <activity
+            android:name=".LoginPage"
+            android:label="Login"> </activity>
 
     </application>
 
