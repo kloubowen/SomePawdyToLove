@@ -157,22 +157,22 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                             // Set the map's camera position to the current location of the device.
                             Log.i("maps", "location successfully found");
                             mLastKnownLocation = (Location)task.getResult();
-                            try {
-                                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-                                List<Address> addresses = geocoder.getFromLocation(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude(), 1);
-                                String city = addresses.get(0).getLocality();
-                                String state = addresses.get(0).getAdminArea();
-                                if (city == null || state == null){
-                                    throw new IOException();
-                                }
-                                cityState = city + ", " + state;
+  //                          try {
+//                                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+//                                List<Address> addresses = geocoder.getFromLocation(mLastKnownLocation.getLatitude(),
+//                                        mLastKnownLocation.getLongitude(), 1);
+//                                String city = addresses.get(0).getLocality();
+//                                String state = addresses.get(0).getAdminArea();
+//                                if (city == null || state == null){
+//                                    throw new IOException();
+//                                }
+//                                cityState = city + ", " + state;
                                 //todo: remove this line
                                 cityState = "Austin, Texas";
                                 rejectButton.performClick();
-                            } catch (IOException e) {
-                                Log.e("error", "getting address");
-                            }
+//                            } catch (IOException e) {
+//                                Log.e("error", "getting address");
+//                            }
                         }
                     }
                 });

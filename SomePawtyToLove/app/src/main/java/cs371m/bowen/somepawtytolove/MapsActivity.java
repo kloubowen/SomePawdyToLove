@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,13 +98,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i("maps", "onMapReady Called");
         mMap = googleMap;
 
+
         // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
+        //updateLocationUI();
+        showPets();
 
         // Get the current location of the device and set the position of the map.
 //        getDeviceLocation();
@@ -120,6 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Address a = addr.get(0);
             LatLng pos = new LatLng(a.getLatitude(), a.getLongitude());
             mo.position(pos);
+            mo.title(pet.getName());
             mMap.addMarker(mo);
         } catch(IOException e) {
             Log.e("maps", "could not parse location");
@@ -160,6 +165,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void showPets() {
         //db.getSavedPetsQuery();
-        db.getPet("id", this);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        db.getPetsCallback(currentUser.getUid(), this);
     }
 }
