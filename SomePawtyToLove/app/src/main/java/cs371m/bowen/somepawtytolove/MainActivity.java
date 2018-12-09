@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Locale;
 
 @SuppressWarnings("ClickableViewAccessibility")
-public class MainActivity extends AppCompatActivity implements PetJson.IPetJson {
+public class MainActivity extends AppCompatActivity implements PetJson.IPetJson, Settings.ISettings {
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
     final int SAVED_ACTIVITY = 3;
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initMySettings();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                                 cityState = city + ", " + state;
                                 //todo: remove this line
                                 cityState = "Austin, Texas";
-                                rejectButton.performClick();
+                                initMySettings();
                             } catch (IOException e) {
                                 Log.e("error", "getting address");
                             }
@@ -184,11 +183,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     }
 
     private void initMySettings(){
-        mySettings = new HashMap<>();
-        mySettings.put("Age", null);
-        mySettings.put("Species", null);
-        mySettings.put("Breed", null);
-        mySettings.put("Sex", null);
+        firebase.getSettings(this);
     }
 
     public void updateUser() {
@@ -219,16 +214,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 //        petFetcher.getShelter("CA790", this);
         savedPets.add(currentPet);
         firebase.savePet(currentPet);
-
-        String species = mySettings.get("Species");
-        if (species != null){
-            species = species.toLowerCase();
-        }
-        String breed = mySettings.get("Breed");
-        String sex = mySettings.get("Sex");
-//        String age =mySettings.get("Age");
-//        petFetcher.findPets(species, breed, sex, "Austin, Texas", age, this);
-
         loadNewPet(view);
 
         //todo: save pet
@@ -253,8 +238,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
             currentPet = fetchedPets.get(nextPetIndex);
             updatePetUI();
         }
-        //todo: load new pet
-        //todo: updatePetUI(pet);
     }
 
     protected void updatePetUI(Pet pet) {
@@ -335,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
             }
         } else if(requestCode == SIGN_IN){
             if (resultCode == RESULT_OK){
+                initMySettings();
                 getLocationPermission();
             } else {
                 updateUser();
@@ -385,6 +369,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
     @Override
     public void fetchShelterList(ArrayList<Shelter> shelters) {
 
+    }
+
+    @Override
+    public void loadSettings(HashMap<String, String> userSettings) {
+        mySettings = userSettings;
+        rejectButton.performClick();
     }
 
     private void setTxtOr(TextView view, String txt, String alternate) {

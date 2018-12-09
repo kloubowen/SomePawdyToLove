@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 // Code adapted from https://stackoverflow.com/questions/17520750/list-view-item-swipe-left-and-swipe-right
-// and adapted again from Homework 5 of CS 371M
+// and adapted again from Homework 5 of CS 371M and is no longer used
 public class PetSwipeDetector implements RecyclerView.OnItemTouchListener {
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent event) {

@@ -1,9 +1,6 @@
 package cs371m.bowen.somepawtytolove;
 
-import android.content.Context;
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,8 +14,6 @@ import android.widget.Toast;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
         PetFirebaseAdapter.DynamicViewHolder> {
@@ -50,21 +45,6 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
                         theView.getContext().startActivity(Intent.createChooser(emailIntent, "Choose email client"));
                     } else {
                         Toast.makeText(theView.getContext(), "Email unavailable", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            theView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Add check for if swipe was detected
-                    int position = getAdapterPosition();
-                    if (position == NO_POSITION){
-                        return;
-                    }
-
-                    if (detector.swipeDetected()){
-                        Log.i("Swipe", "detected");
-                        removeItem(position);
                     }
                 }
             });
@@ -100,8 +80,6 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
 
 
     public void removeItem(int position){
-        MainActivity.savedPets.remove(position);
-        notifyDataSetChanged();
-        Log.i("Swipe", "Removed");
+        getSnapshots().getSnapshot(position).getReference().delete();
     }
 };

@@ -172,4 +172,8 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
 
         }
     }
+
+    public interface ISettings{
+        void loadSettings(HashMap<String, String> userSettings);
+    }
 }

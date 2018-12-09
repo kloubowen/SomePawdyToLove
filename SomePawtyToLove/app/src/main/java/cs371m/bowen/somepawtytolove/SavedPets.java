@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
@@ -32,13 +33,22 @@ public class SavedPets extends AppCompatActivity {
                 .build();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        PetFirebaseAdapter petAdapter = new PetFirebaseAdapter(options);
-//        recyclerView.setAdapter(petAdapter);
-
-
+        final PetFirebaseAdapter petAdapter = new PetFirebaseAdapter(options);
 
 
         recyclerView.setAdapter(petAdapter);
+        // Code adapted from https://youtu.be/dTuhMFP-a1g
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                petAdapter.removeItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @Override
