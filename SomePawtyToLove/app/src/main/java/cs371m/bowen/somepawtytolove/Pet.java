@@ -1,5 +1,6 @@
 package cs371m.bowen.somepawtytolove;
 
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class Pet {
         picIndex = -1;
         id = new PetID();
     }
+
 
     public String getAge(){
         return age;

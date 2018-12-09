@@ -33,7 +33,7 @@ public class SavedPets extends AppCompatActivity {
                 .build();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        final PetFirebaseAdapter petAdapter = new PetFirebaseAdapter(options);
+        final PetFirebaseAdapter petAdapter = new PetFirebaseAdapter(options, this);
 
 
         recyclerView.setAdapter(petAdapter);

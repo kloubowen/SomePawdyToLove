@@ -1,5 +1,6 @@
 package cs371m.bowen.somepawtytolove;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,7 +38,7 @@ import java.util.Locale;
 import static cs371m.bowen.somepawtytolove.MainActivity.cityState;
 import static cs371m.bowen.somepawtytolove.MainActivity.mLastKnownLocation;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, PetJson.IPetJson {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, PetJson.IPetJson, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     final int DEFAULT_ZOOM = 10;
@@ -107,10 +109,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Turn on the My Location layer and the related control on the map.
         //updateLocationUI();
         showPets();
+        mMap.setOnInfoWindowClickListener(this);
 
         // Get the current location of the device and set the position of the map.
-//        getDeviceLocation();
+        getDeviceLocation();
 
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Pet pet = (Pet)marker.getTag();
+        Log.i("maps", "registered marker click");
+        FragmentManager fm = getFragmentManager();
+        Bundle b = new Bundle();
+
+        b.putString("name", pet.getName());
+        b.putString("email", pet.getEmail());
+        b.putString("picURL", pet.getPic());
+        b.putString("description", pet.getDescription());
+        b.putString("breed", pet.getBreed());
+        b.putString("loc", pet.getLocation());
+        b.putString("age", pet.getAge());
+
+        PetFragment myFragment = new PetFragment();
+        myFragment.setArguments(b);
+
+        fm.beginTransaction().replace(R.id.frame, myFragment).commit();
     }
 
     @Override
@@ -125,7 +149,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng pos = new LatLng(a.getLatitude(), a.getLongitude());
             mo.position(pos);
             mo.title(pet.getName());
-            mMap.addMarker(mo);
+            Marker m = mMap.addMarker(mo);
+            m.setTag(pet);
         } catch(IOException e) {
             Log.e("maps", "could not parse location");
         }
