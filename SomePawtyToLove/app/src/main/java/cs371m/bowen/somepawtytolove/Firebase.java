@@ -1,11 +1,16 @@
 package cs371m.bowen.somepawtytolove;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
@@ -41,7 +46,50 @@ public class Firebase {
     public void savePet(Pet pet) {
         db.collection("users").
                 document(user.getUid()).
-                collection("saved").add(pet.id);
-        db.collection("pets").document(pet.getID()).set(pet);
+                collection("saved").add(pet);
+    }
+
+    Query getSavedPetsQuery(String uid) {
+        Query query = db.collection("users").document(uid).collection(
+                "saved");
+        return query;
+    }
+
+    Pet getPet(String id, final PetJson.IPetJson petJson) {
+        DocumentReference docRef = db.collection("pets").document(id);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Pet pet = document.toObject(Pet.class);
+                        petJson.fetchPet(pet);
+                    } else {
+                        Log.d("firebase", "No such document");
+                    }
+                } else {
+                    Log.d("firebase", "get failed with ", task.getException());
+                }
+            }
+        });
+        Query query = db.collection("pets");
+
+        return null;
+    }
+
+    public void deletePet(Pet pet) {
+        //todo: implement
+    }
+
+    public void getSettings() {
+
+    }
+
+    public void saveSettings(HashMap<String, String> settings) {
+        db.collection("users").
+                document(user.getUid()).
+                collection("settings").
+                document("settings").set(settings);
     }
 }

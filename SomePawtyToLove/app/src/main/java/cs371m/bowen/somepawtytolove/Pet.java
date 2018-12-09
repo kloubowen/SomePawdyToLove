@@ -9,6 +9,7 @@ public class Pet {
     private String name;
     private String animal;
     private String breed;
+    private String address;
     private String zip;
     private String city;
     private String state;
@@ -25,6 +26,10 @@ public class Pet {
         String id;
     }
 
+    public Pet() {
+        picUrls = new ArrayList<>();
+        id = new PetID();
+    }
     public Pet(String name, String breed, String zip, String age){
         this.name = name;
         this.breed = breed;
@@ -51,6 +56,16 @@ public class Pet {
         return breed;
     }
 
+    public String getAdd() {return address;}
+
+    public String getZip() {return zip;}
+
+    public String getCity() {return city;}
+
+    public String getState() {return state;}
+
+    public ArrayList<String> getPicUrls() {return picUrls;}
+
     public String getLocation() {
         return city + ", " + state + " " + zip;
     }
@@ -58,6 +73,10 @@ public class Pet {
     public String getID() {return id.id;}
 
     public void setID(String id) {this.id.id=id;}
+
+    public void setStreet(String street) {this.address = street;}
+
+    public String getAddress() {return address+ " "+getLocation();}
 
     public String getPic() {
         if(picUrls.isEmpty())

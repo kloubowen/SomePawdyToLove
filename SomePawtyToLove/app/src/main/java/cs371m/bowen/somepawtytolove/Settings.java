@@ -26,13 +26,14 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
     private String[] speciesList;
     private String[] breedList;
     private HashMap<String, String> mySettings;
+    private Firebase db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         //
-
+        db = Firebase.getInstance();
         mySettings = (HashMap<String, String>) getIntent().getExtras()
                 .getSerializable("CurrentSettings");
         speciesList = getResources().getStringArray(R.array.animals);
@@ -99,7 +100,7 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
             case R.id.senior: mySettings.put("Age", "Senior");break;
             case R.id.all_age: mySettings.put("Age", null);break;
         }
-
+        db.saveSettings(mySettings);
         Bundle bundle = new Bundle();
         bundle.putSerializable("UpdatedSettings", mySettings);
         result.putExtras(bundle);

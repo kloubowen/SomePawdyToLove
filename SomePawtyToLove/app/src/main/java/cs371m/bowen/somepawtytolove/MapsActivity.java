@@ -39,12 +39,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     final int DEFAULT_ZOOM = 10;
     private PetFetcher petFetcher;
+    private Firebase db;
+    private Geocoder geo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         petFetcher = new PetFetcher();
+        db = Firebase.getInstance();
+        geo = new Geocoder(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -107,6 +111,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void fetchPet(Pet pet) {
+        MarkerOptions mo = new MarkerOptions();
+        try {
+            Log.e("maps", "pet location: "+pet.getAddress());
+            List<Address> addr = geo.getFromLocationName(pet.getAddress(), 1);
+            if(addr.isEmpty())
+                return;
+            Address a = addr.get(0);
+            LatLng pos = new LatLng(a.getLatitude(), a.getLongitude());
+            mo.position(pos);
+            mMap.addMarker(mo);
+        } catch(IOException e) {
+            Log.e("maps", "could not parse location");
+        }
+       // mo.position(s.getMapLocation());
+        //mo.title(s.getName());
 
     }
 
@@ -137,5 +156,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         if(!shelters.isEmpty())
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(shelters.get(0).getMapLocation(), DEFAULT_ZOOM));
+    }
+
+    public void showPets() {
+        //db.getSavedPetsQuery();
+        db.getPet("id", this);
     }
 }

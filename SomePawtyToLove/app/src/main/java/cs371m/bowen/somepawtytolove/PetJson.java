@@ -78,6 +78,7 @@ public class PetJson {
             }
             JSONObject contact = petObj.getJSONObject("contact");
             String zip = contact.getJSONObject("zip").getString("$t");
+            String address = contact.getJSONObject("address1").getString("$t");
             String city = contact.getJSONObject("city").getString("$t");
             String state = contact.getJSONObject("state").getString("$t");
             String email = contact.getJSONObject("email").getString("$t");
@@ -85,6 +86,7 @@ public class PetJson {
             mPet.setCityState(city, state);
             mPet.setEmail(email);
             mPet.setID(id);
+            mPet.setStreet(address);
 
             mPet.setDescription(petObj.getJSONObject("description").getString("$t"));
             JSONArray photos = petObj.getJSONObject("media").getJSONObject("photos").getJSONArray("photo");
