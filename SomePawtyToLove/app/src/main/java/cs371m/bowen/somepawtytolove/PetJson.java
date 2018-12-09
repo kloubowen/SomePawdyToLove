@@ -63,6 +63,7 @@ public class PetJson {
                 return null;
             String age = petObj.getJSONObject("age").getString("$t");
             String name = petObj.getJSONObject("name").getString("$t");
+            String id = petObj.getJSONObject("id").getString("$t");
             Log.d("age", age);
             Log.d("name", name);
             //todo: handle breeds as list
@@ -83,6 +84,7 @@ public class PetJson {
             Pet mPet = new Pet(name, breed, zip, age);
             mPet.setCityState(city, state);
             mPet.setEmail(email);
+            mPet.setID(id);
 
             mPet.setDescription(petObj.getJSONObject("description").getString("$t"));
             JSONArray photos = petObj.getJSONObject("media").getJSONObject("photos").getJSONArray("photo");

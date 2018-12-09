@@ -163,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
                                     throw new IOException();
                                 }
                                 cityState = city + ", " + state;
+                                //todo: remove this line
+                                cityState = "Austin, Texas";
                                 rejectButton.performClick();
                             } catch (IOException e) {
                                 Log.e("error", "getting address");
@@ -214,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson 
 //        petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
 //        petFetcher.getShelter("CA790", this);
         savedPets.add(currentPet);
-        //firebase.savePet(currentPet);
+        firebase.savePet(currentPet);
 
         String species = mySettings.get("Species");
         if (species != null){

@@ -16,10 +16,14 @@ public class Pet {
     private String sex;
     private String description;
     private String email;
-    private String id;
+    PetID id;
     private String shelterid;
     private ArrayList<String> picUrls;
     private int picIndex;
+
+    public class PetID{
+        String id;
+    }
 
     public Pet(String name, String breed, String zip, String age){
         this.name = name;
@@ -28,6 +32,7 @@ public class Pet {
         picUrls = new ArrayList<>();
         this.age = age;
         picIndex = -1;
+        id = new PetID();
     }
 
     public String getAge(){
@@ -50,7 +55,9 @@ public class Pet {
         return city + ", " + state + " " + zip;
     }
 
-    public String getID() {return id;}
+    public String getID() {return id.id;}
+
+    public void setID(String id) {this.id.id=id;}
 
     public String getPic() {
         if(picUrls.isEmpty())
