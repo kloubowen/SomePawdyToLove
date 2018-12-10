@@ -153,6 +153,10 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
                             // Set the map's camera position to the current location of the device.
                             Log.i("maps", "location successfully found");
                             mLastKnownLocation = (Location)task.getResult();
+                            if(mLastKnownLocation==null) {
+                                Toast.makeText(getApplicationContext(), "Could not find location. Please check network connection", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             try {
                                 Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                                 List<Address> addresses = geocoder.getFromLocation(mLastKnownLocation.getLatitude(),

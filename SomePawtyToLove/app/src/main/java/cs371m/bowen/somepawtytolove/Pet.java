@@ -60,7 +60,11 @@ public class Pet {
 
     public void setStreet(String street) {this.address = street;}
 
-    public String getAddress() {return address+ " "+getLocation();}
+    public String getAddress() {
+        if(address.charAt(address.length()-1) > '9')//if non digit ending
+            return address+ ", "+getLocation();
+        return address;
+    }
 
     public String getPic() {
         if(picUrls.isEmpty())
