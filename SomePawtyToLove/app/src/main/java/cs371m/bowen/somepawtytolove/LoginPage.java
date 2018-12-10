@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginPage extends AppCompatActivity {
     EditText email, password;
     private FirebaseAuth mAuth;
-//    Button signIn, signUp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +39,6 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-//                            oldUser();
                             success();
                         } else {
                             Toast.makeText(LoginPage.this,
@@ -62,7 +59,6 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-//                            newUser();
                             success();
                         } else {
                             Toast.makeText(LoginPage.this,
@@ -82,21 +78,8 @@ public class LoginPage extends AppCompatActivity {
         finish();
     }
 
-//    public void newUser(){
-//        Intent i = new Intent();
-//        setResult(MainActivity.NEW, i);
-//        finish();
-//    }
-//
-//    public void oldUser(){
-//        Intent i = new Intent();
-//        setResult(MainActivity.OLD, i);
-//        finish();
-//    }
-
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         Intent i = new Intent();
         setResult(MainActivity.EXITED, i);
         finish();

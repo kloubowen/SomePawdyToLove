@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "624387069458-hda9giemknjtduub69r5u158je30o6lv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cs371m.bowen.somepawtytolove",
+            "certificate_hash": "d9649ddefbe60752521c037cdc42151449611d46"
+          }
+        },
+        {
           "client_id": "624387069458-hn7cjrn3tt516o6ubejsj2q59vci0m0v.apps.googleusercontent.com",
           "client_type": 3
         }

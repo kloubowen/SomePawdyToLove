@@ -1,7 +1,5 @@
 package cs371m.bowen.somepawtytolove;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
 public class Shelter {

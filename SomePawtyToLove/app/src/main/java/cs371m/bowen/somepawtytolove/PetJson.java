@@ -29,7 +29,6 @@ public class PetJson {
             Log.d("Error", "JSON parsing pet record");
         }
 
-        // This is NOT what you should return
         return null;
     }
 
