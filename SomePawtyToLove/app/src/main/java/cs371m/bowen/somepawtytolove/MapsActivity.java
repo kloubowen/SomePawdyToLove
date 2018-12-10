@@ -157,11 +157,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void fetchShelter(Shelter shelter) {
-
-    }
-
-    @Override
     public void fetchShelterList(ArrayList<Shelter> shelters) {
         if(mMap==null)
             return;

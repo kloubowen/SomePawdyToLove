@@ -15,21 +15,7 @@ public class PetJson {
         void fetchPet(Pet pet);
         void fetchPetList(ArrayList<Pet> pets);
         void fetchBreedList(ArrayList<String> breeds);
-        void fetchShelter(Shelter shelter);
         void fetchShelterList(ArrayList<Shelter> shelters);
-    }
-
-    public static Pet jsonToPet(JSONObject jO){
-        Log.d("JSON", jO.toString() );
-        try {
-            JSONObject finder = jO.getJSONObject("petfinder");
-            JSONObject petObj = finder.getJSONObject("pet");
-            return parsePet(petObj);
-        } catch (JSONException error) {
-            Log.d("Error", "JSON parsing pet record");
-        }
-
-        return null;
     }
 
     public static ArrayList<Pet> jsonToPetList(JSONObject jo){
