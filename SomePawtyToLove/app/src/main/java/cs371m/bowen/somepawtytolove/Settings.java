@@ -85,7 +85,11 @@ public class Settings extends AppCompatActivity implements PetJson.IPetJson {
             mySettings.put("Species", speciesList[species.getSelectedItemPosition()]);
             if (breeds.getSelectedItemPosition() != 0){
                 mySettings.put("Breed", breedList[breeds.getSelectedItemPosition()]);
+            } else {
+                mySettings.put("Breed", null);
             }
+        } else {
+            mySettings.put("Species", null);
         }
 
         switch (sex.getCheckedRadioButtonId()){
