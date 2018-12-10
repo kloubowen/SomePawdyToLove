@@ -193,15 +193,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
         Log.i("authcheck", "update user called");
         Intent i = new Intent(this, LoginPage.class);
         startActivityForResult(i, LOGIN_ACTIVITY);
-//        List<AuthUI.IdpConfig> providers = Arrays.asList(
-//                new AuthUI.IdpConfig.EmailBuilder().build());
-//
-//        startActivityForResult(
-//                AuthUI.getInstance()
-//                        .createSignInIntentBuilder()
-//                        .setAvailableProviders(providers)
-//                        .build(), SIGN_IN);
-
     }
 
     @Override
@@ -212,33 +203,11 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     }
 
     public void savePet(View view) {
-        //Toast toast = Toast.makeText(this, "saving pets not yet implemented", Toast.LENGTH_SHORT);
-        //toast.show();
-//        petFetcher.getBreeds("cat", this);
-//        petFetcher.getRandomPet("dog", "boxer", null, "78705", this);
-//        petFetcher.getShelter("CA790", this);
-        savedPets.add(currentPet);
         firebase.savePet(currentPet);
-
-        String species = mySettings.get("Species");
-        if (species != null){
-            species = species.toLowerCase();
-        }
-        String breed = mySettings.get("Breed");
-        String sex = mySettings.get("Sex");
-//        String age =mySettings.get("Age");
-//        petFetcher.findPets(species, breed, sex, "Austin, Texas", age, this);
-
         loadNewPet(view);
-
-        //todo: save pet
-        //todo: load new pet
-        //todo: updatePetUI(pet);
     }
 
     public void loadNewPet(View view) {
-       // Toast toast = Toast.makeText(this, "rejecting pets not yet implemented", Toast.LENGTH_SHORT);
-        //toast.show();
         disableButtons();
         if (fetchedPets == null || nextPetIndex == fetchedPets.size()){
             String species = mySettings.get("Species");
@@ -278,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     }
 
     protected void signOut(){
-        //maybe clear current ui
         lastOffset = "0";
         fetchedPets = null;
         currentPet = null;
@@ -296,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                //todo: load settings
                 Intent settingsIntent = new Intent(this, Settings.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("CurrentSettings", mySettings);
@@ -305,12 +272,9 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
                 return true;
             case R.id.action_map:
                 Intent i = new Intent(this, MapsActivity.class);
-                //i.putExtra("loop_setting", loop);
-                //todo: add extras?
                 startActivityForResult(i, MAPS_ACTIVITY);
                 return true;
             case R.id.action_saved:
-                //todo: load saved
                 Intent savedIntent = new Intent(this, SavedPets.class);
                 startActivity(savedIntent);
                 return true;
@@ -336,16 +300,8 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
                     rejectButton.performClick();
                 }
             }
-//        } else if(requestCode == SIGN_IN){
-//            if (resultCode == RESULT_OK){
-//                initMySettings();
-//                getLocationPermission();
-//            } else {
-//                updateUser();
-//            }
         } else if (requestCode == LOGIN_ACTIVITY){
             if (resultCode == RESULT_OK){
-//                initMySettings();
                 Firebase.changeUser();
                 getLocationPermission();
             } else if (resultCode == EXITED){

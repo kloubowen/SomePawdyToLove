@@ -22,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
         PetFirebaseAdapter.DynamicViewHolder> {
-    private PetSwipeDetector detector;
     private Context context;
 
     public class DynamicViewHolder extends RecyclerView.ViewHolder {
@@ -31,9 +30,11 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
         TextView breed;
         TextView location;
         String email;
+        View view;
 
         public DynamicViewHolder(final View theView, final Context mContext) {
             super(theView);
+            view = theView;
             thumbnail = theView.findViewById(R.id.thumbnail);
             name = theView.findViewById(R.id.name);
             breed = theView.findViewById(R.id.breed);
@@ -54,36 +55,10 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
                     }
                 }
             });
-//            thumbnail.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i("save","clicked on thumbnail");
-//                    FragmentTransaction ft;
-//                    ft = ((FragmentActivity)mContext).getFragmentManager().beginTransaction();
-//                    ft.attach(PetFragment.newInstance());
-//                    ft.add(R.id.frame, PetFragment.newInstance(), "details");
-//                    Bundle b = new Bundle();
-//                    b.putParcelable("pet", );
-//                    imageFragment.setArguments(b);
-//                    // TRANSIT_FRAGMENT_FADE calls for the Fragment to fade away
-//                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//                    ft.commit();
-////                    if (email != null){
-////                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-////                        emailIntent.setType("message/rfc822");
-////                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-////                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Pet Adoption");
-////                        theView.getContext().startActivity(Intent.createChooser(emailIntent, "Choose email client"));
-////                    } else {
-////                        Toast.makeText(theView.getContext(), "Email unavailable", Toast.LENGTH_SHORT).show();
-////                    }
-//                }
-//            });
         }
     }
     PetFirebaseAdapter(@NonNull FirestoreRecyclerOptions<Pet> options, Context context) {
         super(options);
-        detector = new PetSwipeDetector();
         this.context = context;
     }
     @Override
@@ -92,8 +67,9 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
         holder.breed.setText(pet.getBreed());
         holder.name.setText(pet.getName());
         holder.email = pet.getEmail();
-        Net.getInstance().glideFetch(pet.getPic(), holder.thumbnail);
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+        final String imageUrl = pet.getPic();
+        Net.getInstance().glideFetch(imageUrl, holder.thumbnail);
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("save","clicked on thumbnail");
@@ -102,7 +78,7 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
 
                 b.putString("name", pet.getName());
                 b.putString("email", pet.getEmail());
-                b.putString("picURL", pet.getPic());
+                b.putString("picURL", imageUrl);
                 b.putString("description", pet.getDescription());
                 b.putString("breed", pet.getBreed());
                 b.putString("loc", pet.getLocation());
@@ -111,7 +87,7 @@ public class PetFirebaseAdapter extends FirestoreRecyclerAdapter<Pet,
                 PetFragment myFragment = new PetFragment();
                 myFragment.setArguments(b);
 
-                fm.beginTransaction().replace(R.id.frame, myFragment).commit();
+                fm.beginTransaction().replace(R.id.frame, myFragment).addToBackStack(null).commit();
 
 //                FragmentTransaction ft;
 //                ft = ((FragmentActivity)context).getFragmentManager().beginTransaction();

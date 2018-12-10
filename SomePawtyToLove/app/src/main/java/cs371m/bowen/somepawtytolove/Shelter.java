@@ -29,4 +29,8 @@ public class Shelter {
         float lo = Float.parseFloat(lng);
         mapLocation = new LatLng(la, lo);
     }
+
+    public String getAddress(){
+        return address;
+    }
 }

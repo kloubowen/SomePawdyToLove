@@ -12,7 +12,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,7 +40,7 @@ import java.util.Locale;
 import static cs371m.bowen.somepawtytolove.MainActivity.cityState;
 import static cs371m.bowen.somepawtytolove.MainActivity.mLastKnownLocation;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, PetJson.IPetJson, GoogleMap.OnInfoWindowClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, PetJson.IPetJson, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     final int DEFAULT_ZOOM = 10;
@@ -68,6 +70,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.getUiSettings().setZoomGesturesEnabled(true);
             getDeviceLocation();
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
@@ -118,8 +122,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        if (marker.getTag() == null){
+            return;
+        }
         Pet pet = (Pet)marker.getTag();
-        Log.i("maps", "registered marker click");
+        Log.i("maps", "registered marker click" + marker.getTag().toString());
         FragmentManager fm = getFragmentManager();
         Bundle b = new Bundle();
 
@@ -133,8 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         PetFragment myFragment = new PetFragment();
         myFragment.setArguments(b);
-
-        fm.beginTransaction().replace(R.id.frame, myFragment).commit();
+        fm.beginTransaction().replace(R.id.frame, myFragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -154,9 +160,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch(IOException e) {
             Log.e("maps", "could not parse location");
         }
-       // mo.position(s.getMapLocation());
-        //mo.title(s.getName());
-
     }
 
     @Override
@@ -180,12 +183,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for(Shelter s : shelters) {
             //Log.d("found", s.getName());
             MarkerOptions mo = new MarkerOptions();
-            mo.position(s.getMapLocation());
-            mo.title(s.getName());
-            mMap.addMarker(mo);
+            try {
+                Log.e("maps", "shelter location: "+s.getAddress());
+                List<Address> addr = geo.getFromLocationName(s.getAddress(), 1);
+                if(addr.isEmpty())
+                    return;
+                Address a = addr.get(0);
+                LatLng pos = new LatLng(a.getLatitude(), a.getLongitude());
+                mo.position(pos);
+                mo.title(s.getName());
+                mMap.addMarker(mo);
+            } catch(IOException e) {
+                Log.e("maps", "could not parse location");
+            }
         }
         if(!shelters.isEmpty())
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(shelters.get(0).getMapLocation(), DEFAULT_ZOOM));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     public void showPets() {

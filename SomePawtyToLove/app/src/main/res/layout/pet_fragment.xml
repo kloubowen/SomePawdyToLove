@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     android:id="@+id/petFragment"
     android:background="@android:color/white"
+    android:clickable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
-        android:id="@+id/profileImage"
+        android:id="@+id/fragmentImage"
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:layout_margin="0dp"
@@ -30,7 +31,7 @@
         android:textSize="45dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+        app:layout_constraintTop_toBottomOf="@+id/fragmentImage" />
 
     <TextView
         android:id="@+id/ageTxt"
@@ -95,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/nameTxt"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage"
+        app:layout_constraintTop_toBottomOf="@+id/fragmentImage"
         app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>

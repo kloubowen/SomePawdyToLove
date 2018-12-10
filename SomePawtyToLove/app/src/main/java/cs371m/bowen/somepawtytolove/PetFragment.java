@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,7 +70,7 @@ public class PetFragment extends Fragment {
                     }
                 });
 
-        //Net.getInstance().glideFetch(savedInstanceState.getString("petURL"), getView().findViewById(R.id.profileImage));
+        Net.getInstance().glideFetch(bundle.getString("picURL"), (ImageView) getView().findViewById(R.id.fragmentImage));
 
     }
 }
