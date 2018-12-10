@@ -13,7 +13,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -62,8 +61,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             getDeviceLocation();
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
-        } catch (NullPointerException e) {
-            Log.e("Exception: %s", e.getMessage());
         }
     }
 
@@ -72,9 +69,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.
          */
-        if(mLastKnownLocation==null) {
-            Toast.makeText(getApplicationContext(), "Could not find location. Please check network connection", Toast.LENGTH_SHORT).show();
-        }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(mLastKnownLocation.getLatitude(),
                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -143,7 +137,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Marker m = mMap.addMarker(mo);
             m.setTag(pet);
         } catch(IOException e) {
-            Log.e("maps", "could not parse pet location");
+            Log.e("maps", "could not parse location");
         }
     }
 
@@ -172,10 +166,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LatLng pos = new LatLng(a.getLatitude(), a.getLongitude());
                 mo.position(pos);
                 mo.title(s.getName());
-                mo.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 mMap.addMarker(mo);
             } catch(IOException e) {
-                Log.e("maps", "could not parse shelter location");
+                Log.e("maps", "could not parse location");
             }
         }
         if(!shelters.isEmpty())
