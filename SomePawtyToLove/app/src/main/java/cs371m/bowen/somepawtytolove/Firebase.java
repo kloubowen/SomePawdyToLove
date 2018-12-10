@@ -3,6 +3,8 @@ package cs371m.bowen.somepawtytolove;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,6 +17,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Firebase {
@@ -74,6 +77,23 @@ public class Firebase {
                 }
             }
         });
+//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document != null) {
+//                        Pet pet = document.toObject(Pet.class);
+//                        petJson.fetchPet(pet);
+//                    } else {
+//                        Log.d("firebase", "No such document");
+//                    }
+//                } else {
+//                    Log.d("firebase", "get failed with ", task.getException());
+//                }
+//            }
+//        });
+//        Query query = db.collection("pets");
 
         return null;
     }

@@ -6,16 +6,20 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class Pet {
+    private String status;
     private String name;
+    private String animal;
     private String breed;
     private String address;
     private String zip;
     private String city;
     private String state;
     private String age;
+    private String sex;
     private String description;
     private String email;
     PetID id;
+    private String shelterid;
     private ArrayList<String> picUrls;
     private int picIndex;
 
@@ -23,13 +27,17 @@ public class Pet {
         String id;
     }
 
+    public Pet() {
+        picUrls = new ArrayList<>();
+        id = new PetID();
+    }
     public Pet(String name, String breed, String zip, String age){
         this.name = name;
         this.breed = breed;
         this.zip = zip;
         picUrls = new ArrayList<>();
         this.age = age;
-        picIndex = -2;
+        picIndex = -1;
         id = new PetID();
     }
 
@@ -52,9 +60,19 @@ public class Pet {
 
     public String getAdd() {return address;}
 
+    public String getZip() {return zip;}
+
+    public String getCity() {return city;}
+
+    public String getState() {return state;}
+
+    public ArrayList<String> getPicUrls() {return picUrls;}
+
     public String getLocation() {
         return city + ", " + state + " " + zip;
     }
+
+    public String getID() {return id.id;}
 
     public void setID(String id) {this.id.id=id;}
 

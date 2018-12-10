@@ -2,9 +2,11 @@ package cs371m.bowen.somepawtytolove;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ public class PetFragment extends Fragment {
     static PetFragment newInstance() {
         PetFragment imageFragment = new PetFragment();
         Bundle b = new Bundle();
+        //b.putParcelable("bitmap", bitmap);
         imageFragment.setArguments(b);
         return imageFragment;
     }
@@ -36,6 +39,8 @@ public class PetFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        View v = getView();
+        // XXX Write me.  I display a bitmap and if clicked, I disappear
         TextView name = getView().findViewById(R.id.nameTxt);
         setTxtOr(name, bundle.getString("name"), "No Name");
         TextView type = getView().findViewById(R.id.speciesTxt);
