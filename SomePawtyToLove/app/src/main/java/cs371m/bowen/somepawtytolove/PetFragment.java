@@ -66,5 +66,6 @@ public class PetFragment extends Fragment {
                 });
 
         Net.getInstance().glideFetch(bundle.getString("picURL"), (ImageView) getView().findViewById(R.id.fragmentImage));
+
     }
 }

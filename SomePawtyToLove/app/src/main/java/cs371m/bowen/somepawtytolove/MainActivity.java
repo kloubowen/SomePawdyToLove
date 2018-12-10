@@ -315,7 +315,17 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
 
     @Override
     public void fetchPet(Pet pet) {
-
+        if(pet==null) {
+            String species = mySettings.get("Species");
+            if (species != null){
+                species = species.toLowerCase();
+            }
+            String breed = mySettings.get("Breed");
+            String sex = mySettings.get("Sex");
+            petFetcher.getRandomPet(species, breed, sex, "78705", this);
+        } else{
+            updatePetUI(pet);
+        }
     }
 
     @Override
@@ -336,6 +346,11 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     @Override
     public void fetchBreedList(ArrayList<String> breeds) {
         // Intentionally left blank. Only Setting should deal with breeds.
+    }
+
+    @Override
+    public void fetchShelter(Shelter shelter) {
+
     }
 
     @Override
