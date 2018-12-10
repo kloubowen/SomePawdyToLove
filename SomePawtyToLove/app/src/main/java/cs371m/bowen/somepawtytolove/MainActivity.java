@@ -45,10 +45,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     final int MAPS_ACTIVITY = 1;
     final int SETTINGS_ACTIVITY = 2;
     final int LOGIN_ACTIVITY = 3;
-//    final int SIGN_IN = 4;
-    static final int NEW = 5;
-    static final int OLD = 6;
-    static final int EXITED = 6;
+    static final int EXITED = 4;
     public static ArrayList<Pet> savedPets;
     public static String AppName = "SomePawdyToLove";
     public static String lastOffset = "0";
@@ -58,12 +55,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     private Net net;
     private Pet currentPet;
     private int nextPetIndex;
-    private FloatingActionButton rejectButton, saveButton;
+    private FloatingActionButton rejectButton, saveButton, bigReject, bigSave;
     private FirebaseAuth mAuth;
     private Firebase firebase;
     private FirebaseUser currentUser;
 
-    private ImageView pic;
+    private ImageView pic, bigPic;
     private float x1, x2, y1, y2;
     private boolean mLocationPermissionGranted;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -94,8 +91,12 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
         //Set up listeners
         rejectButton = findViewById(R.id.floatingReject);
         saveButton = findViewById(R.id.floatingSave);
+        bigReject = findViewById(R.id.bigFloatingReject);
+        bigSave = findViewById(R.id.bigFloatingSave);
         pic = findViewById(R.id.profileImage);
         pic.setOnTouchListener(new Swipe());
+        bigPic = findViewById(R.id.bigProfileImage);
+        bigPic.setOnTouchListener(new Swipe());
 
         TextView textView = (TextView) findViewById(R.id.descriptionTxt);
         textView.setMovementMethod(new ScrollingMovementMethod());
@@ -220,16 +221,20 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
             petFetcher.findPets(species, breed, sex, cityState, age, this);
         } else{
             currentPet = fetchedPets.get(nextPetIndex);
+            openBig();
             updatePetUI();
         }
     }
 
     protected void updatePetUI(Pet pet) {
         currentPet = pet;
+        openBig();
         updatePetUI();
     }
 
     protected void updatePetUI() {
+        TextView bigName = findViewById(R.id.bigNameTxt);
+        setTxtOr(bigName, currentPet.getName(), "No Name");
         TextView name = findViewById(R.id.nameTxt);
         setTxtOr(name, currentPet.getName(), "No Name");
         TextView type = findViewById(R.id.speciesTxt);
@@ -241,7 +246,9 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
         TextView bio = findViewById(R.id.descriptionTxt);
         bio.setMovementMethod(new ScrollingMovementMethod());
         setTxtOr(bio, currentPet.getDescription(), "");
-        net.glideFetch(currentPet.getPic(), pic);
+        String url = currentPet.getPic();
+        net.glideFetch(url, bigPic);
+        net.glideFetch(url, pic);
         nextPetIndex++;
         enableButtons();
     }
@@ -252,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
         currentPet = null;
         nextPetIndex = 0;
         mySettings = null;
+        openBig();
         AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -374,16 +382,65 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
     private void disableButtons(){
         rejectButton.setClickable(false);
         saveButton.setClickable(false);
+        bigReject.setClickable(false);
+        bigSave.setClickable(false);
     }
 
     private void enableButtons(){
         rejectButton.setClickable(true);
         saveButton.setClickable(true);
+        bigReject.setClickable(true);
+        bigSave.setClickable(true);
     }
 
     public void changePic(){
         String url = currentPet.getPic();
         net.glideFetch(url, pic);
+        net.glideFetch(url, bigPic);
+    }
+
+    public void openFull(){
+        TextView bigName = findViewById(R.id.bigNameTxt);
+        bigName.setVisibility(View.INVISIBLE);
+        TextView name = findViewById(R.id.nameTxt);
+        name.setVisibility(View.VISIBLE);
+        TextView type = findViewById(R.id.speciesTxt);
+        type.setVisibility(View.VISIBLE);
+        TextView location = findViewById(R.id.locationTxt);
+        location.setVisibility(View.VISIBLE);
+        TextView age = findViewById(R.id.ageTxt);
+        age.setVisibility(View.VISIBLE);
+        TextView bio = findViewById(R.id.descriptionTxt);
+        bio.setMovementMethod(new ScrollingMovementMethod());
+        bio.setVisibility(View.VISIBLE);
+        pic.setVisibility(View.VISIBLE);
+        bigPic.setVisibility(View.INVISIBLE);
+        rejectButton.setVisibility(View.VISIBLE);
+        bigReject.setVisibility(View.INVISIBLE);
+        saveButton.setVisibility(View.VISIBLE);
+        bigSave.setVisibility(View.INVISIBLE);
+    }
+
+    public void openBig(){
+        TextView bigName = findViewById(R.id.bigNameTxt);
+        bigName.setVisibility(View.VISIBLE);
+        TextView name = findViewById(R.id.nameTxt);
+        name.setVisibility(View.INVISIBLE);
+        TextView type = findViewById(R.id.speciesTxt);
+        type.setVisibility(View.INVISIBLE);
+        TextView location = findViewById(R.id.locationTxt);
+        location.setVisibility(View.INVISIBLE);
+        TextView age = findViewById(R.id.ageTxt);
+        age.setVisibility(View.INVISIBLE);
+        TextView bio = findViewById(R.id.descriptionTxt);
+        bio.setMovementMethod(new ScrollingMovementMethod());
+        bio.setVisibility(View.INVISIBLE);
+        pic.setVisibility(View.INVISIBLE);
+        bigPic.setVisibility(View.VISIBLE);
+        rejectButton.setVisibility(View.INVISIBLE);
+        bigReject.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+        bigSave.setVisibility(View.VISIBLE);
     }
 
     private class Swipe implements View.OnTouchListener{
@@ -399,12 +456,14 @@ public class MainActivity extends AppCompatActivity implements PetJson.IPetJson,
                     y2 = event.getY();
                     if (x1 == x2 && y1 == y2) {
                         changePic();
-                    } else if (x1 > x2) {
+                    } else if (Math.abs(x1 - x2) > 100) {
                         // Swipe Left
                         rejectButton.performClick();
-                    } else if (x2 > x1) {
+                    } else if (Math.abs(x2 - x1)> 100) {
                         // Swipe Right
                         saveButton.performClick();
+                    } else if (Math.abs(y2 - y1) > 100 && v.getId() == R.id.bigProfileImage){
+                        openFull();
                     }
                     return true;
             }

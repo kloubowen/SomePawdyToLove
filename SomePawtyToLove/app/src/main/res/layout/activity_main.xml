@@ -7,12 +7,62 @@
     tools:context=".MainActivity">
 
     <ImageView
+        android:id="@+id/bigProfileImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bigNameTxt"
+        app:srcCompat="@android:drawable/btn_star_big_on"/>
+
+    <TextView
+        android:id="@+id/bigNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Name"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bigFloatingSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:onClick="savePet"
+        app:layout_constraintBottom_toBottomOf="@+id/bigProfileImage"
+        app:layout_constraintEnd_toEndOf="@+id/bigProfileImage"
+        app:srcCompat="@drawable/ic_check_circle_black_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bigFloatingReject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:onClick="loadNewPet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_cancel_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bigProfileImage"
+        tools:layout_editor_absoluteY="147dp" />
+
+    <ImageView
         android:id="@+id/profileImage"
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:layout_margin="0dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +79,7 @@
         android:text="Name"
         android:textSize="45dp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImage" />
 
@@ -41,6 +92,7 @@
         android:layout_marginTop="8dp"
         android:text="Age"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameTxt" />
 
@@ -53,6 +105,7 @@
         android:layout_marginTop="8dp"
         android:text="Species"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ageTxt" />
 
@@ -65,6 +118,7 @@
         android:layout_marginTop="8dp"
         android:text="Location"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/speciesTxt" />
 
@@ -77,6 +131,7 @@
         android:layout_marginTop="8dp"
         android:text="Description"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationTxt"
@@ -90,6 +145,7 @@
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:onClick="savePet"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/profileImage"
         app:layout_constraintEnd_toEndOf="@+id/profileImage"
         app:srcCompat="@drawable/ic_check_circle_black_24dp" />
@@ -99,8 +155,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:onClick="loadNewPet"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_cancel_black_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/profileImage"
